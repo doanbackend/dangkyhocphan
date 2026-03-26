@@ -1,0 +1,5 @@
+package space.emdon.dangkyhocphan.RBAC.permission;
+
+public class PermissionController {
+
+}
