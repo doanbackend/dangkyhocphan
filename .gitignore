@@ -29,5 +29,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
 .vscode/
+
+/httpRequests/
+
+# Spring Boot config
+**/application.properties
+**/application-*.properties
+
