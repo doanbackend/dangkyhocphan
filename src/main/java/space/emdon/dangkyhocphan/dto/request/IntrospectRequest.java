@@ -1,5 +1,14 @@
 package space.emdon.dangkyhocphan.dto.request;
 
-public class IntrospectRequest {
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+public class IntrospectRequest {
+    String token;
 }
+

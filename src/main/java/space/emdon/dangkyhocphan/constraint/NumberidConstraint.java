@@ -5,18 +5,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import space.emdon.dangkyhocphan.validator.DobValidator;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import space.emdon.dangkyhocphan.validator.NumberidValidator;
 
 @Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {DobValidator.class})
-public @interface DobConstraint {
-    String message() default "{DOB_INVALID sai ngay sinh }";
-
-    int min();
+@Constraint(validatedBy = {NumberidValidator.class}) 
+public @interface NumberidConstraint {
+    
+    String message() default "Mã số không hợp lệ, chỉ được chứa các ký tự số";
 
     Class<?>[] groups() default {};
 

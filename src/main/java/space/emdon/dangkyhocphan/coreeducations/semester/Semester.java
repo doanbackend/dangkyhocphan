@@ -1,16 +1,12 @@
 package space.emdon.dangkyhocphan.coreeducations.semester;
 
-import jakarta.persistence.GenerationType;
-
+import jakarta.persistence.*;
+import space.emdon.dangkyhocphan.constraint.RegistrationDateConstraint;
 import java.time.LocalDate;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.util.Set;
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
@@ -19,14 +15,22 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class Semester{
+@RegistrationDateConstraint
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Semester {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
+    @Column(nullable = false)
     String name;
 
+    @Column(nullable = false)
     LocalDate startDate;
+
+    @Column(nullable = false)
     LocalDate endDate;
+
+    LocalDateTime registrationStartDate;
+    LocalDateTime registrationEndDate;
+
+    @OneToMany(mappedBy = "semester")
+    Set<Sectionclass> sectionClasses;
 }

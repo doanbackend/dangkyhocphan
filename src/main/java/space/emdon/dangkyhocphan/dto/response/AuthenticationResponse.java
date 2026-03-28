@@ -1,5 +1,14 @@
 package space.emdon.dangkyhocphan.dto.response;
 
-public class AuthenticationResponse {
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+public class AuthenticationResponse {
+    String token;
+    boolean authenticated;
 }

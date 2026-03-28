@@ -1,5 +1,11 @@
 package space.emdon.dangkyhocphan.dto.request;
 
-public class RefreshRequest {
+import lombok.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RefreshRequest {
+    String token;
 }

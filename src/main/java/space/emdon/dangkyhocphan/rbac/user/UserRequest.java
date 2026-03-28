@@ -1,12 +1,9 @@
 package space.emdon.dangkyhocphan.rbac.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
+import space.emdon.dangkyhocphan.constraint.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -18,7 +15,7 @@ import java.util.Set;
 public class UserRequest {
     @NotBlank(message = "NAME_REQUIRED")
     @Size(min = 5, message = "NAME_INCALID")
-    String username;
+    String name;
     @NotBlank(message = "EMAIL_REQUIRED")
     @Email(message = "EMAIL_INVALID")
     String email;
@@ -26,8 +23,9 @@ public class UserRequest {
     @NotBlank(message = "PASSWORD_REQUIRED")
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
-
-    @NumberIDConstraint(message = "NUMBER_ID_INVALID")
+    
+    @Size(min = 2, max = 2, message = "NUMBER_ID_INVALID")
+    @Pattern(regexp = "^[1-9][0-9]$", message = "NUMBER_ID_INVALID")
     String numberid;
 
     @PhoneConstraint(message = "PHONE_INVALID")
@@ -39,7 +37,4 @@ public class UserRequest {
 
     Set<String> roles;
     Set<String> assignedClasses;
-
-
-
 }

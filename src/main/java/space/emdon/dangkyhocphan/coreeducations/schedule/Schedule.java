@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import space.emdon.dangkyhocphan.coreeducations.sectionClass.Sectionclass;
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
 
 import java.time.DayOfWeek;
 

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import space.emdon.dangkyhocphan.dto.response.ApiResponse;
 
 import java.nio.file.AccessDeniedException;
-import java.util.ConcurrentModificationException;
 
 @Slf4j
 @ControllerAdvice
@@ -98,6 +97,5 @@ public class GlobalExceptionHandle {
                                 .message(errorMessage)
                             .build();
         return  ResponseEntity.badRequest().body(response);
-
     }
 }

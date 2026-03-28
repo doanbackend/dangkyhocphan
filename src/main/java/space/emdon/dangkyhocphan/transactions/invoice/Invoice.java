@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.servlet.Registration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 import space.emdon.dangkyhocphan.coreeducations.semester.Semester;
 import space.emdon.dangkyhocphan.rbac.user.User;
 import jakarta.persistence.GenerationType;
-
+import space.emdon.dangkyhocphan.transactions.registration.Registration;
 @Entity
 @Getter
 @Setter
@@ -30,22 +29,25 @@ import jakarta.persistence.GenerationType;
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
-    private User student;
-    @OneToMany
+    User student;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id")
     Set<Registration> registrations;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "semester_id")
-    private Semester semester;
+    Semester semester;
 
-    private Long totalAmount;
-    
-    private Boolean paid = false;
-    
-    private LocalDate paymentDate;
+    Long totalAmount;
+
+    Boolean paid = false;
+
+    LocalDate paymentDate;
 
 
 }

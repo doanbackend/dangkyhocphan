@@ -17,8 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import space.emdon.dangkyhocphan.coreeducations.sectionClass.*;
 import space.emdon.dangkyhocphan.rbac.user.*;
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.*;
 import space.emdon.dangkyhocphan.enums.RegistrationStatus;
 import jakarta.persistence.GenerationType;
 

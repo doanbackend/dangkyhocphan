@@ -19,8 +19,8 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.FetchType;
-
-
+import space.emdon.dangkyhocphan.rbac.role.*;
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.*;
 @Entity
 @Getter
 @Setter
@@ -35,9 +35,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    @Column(unique = true)
+    @Column(length = 10, nullable = false, updatable = false)
     String numberid;
-    String username;
+    String name;
     @Column(nullable = false, unique = true)
     String email;
     String password;

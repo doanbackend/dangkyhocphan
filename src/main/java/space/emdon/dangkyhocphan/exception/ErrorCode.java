@@ -30,6 +30,17 @@ public enum ErrorCode {
     ROLE_NOT_FOUND(1014, "Role not found", HttpStatus.NOT_FOUND),
     ROLE_EXISTED(1015, "Role existed", HttpStatus.BAD_REQUEST),
     PERMISSION_NOT_FOUND(1016, "Permission not found", HttpStatus.NOT_FOUND),
+
+    SUBJECT_ALREADY_EXISTS(1017, "Subject already exists", HttpStatus.BAD_REQUEST),
+    SUBJECT_CODE_EXISTED(1018, "Subject code existed", HttpStatus.BAD_REQUEST),
+    SUBJECT_NAME_EXISTED(1019, "Subject name existed", HttpStatus.BAD_REQUEST),
+    SUBJECT_NOT_FOUND(1020, "Subject not found", HttpStatus.NOT_FOUND),
+
+    SCHEDULE_NOT_FOUND(1021, "Schedule not found", HttpStatus.NOT_FOUND),
+    SCHEDULE_ALREADY_EXISTS(1022, "Schedule already exists", HttpStatus.BAD_REQUEST),
+    SCHEDULE_NOT_EXIST(1023, "Schedule not exist", HttpStatus.NOT_FOUND);
+    
+    
     ;
 
 
@@ -41,6 +52,4 @@ public enum ErrorCode {
     int code;
     String message;
     HttpStatusCode statusCode;
-
-
 }
