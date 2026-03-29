@@ -5,33 +5,34 @@ import jakarta.validation.ConstraintValidatorContext;
 import space.emdon.dangkyhocphan.constraint.RegistrationDateConstraint;
 import space.emdon.dangkyhocphan.coreeducations.semester.Semester;
 
-public class RegistrationDateValidator implements ConstraintValidator<RegistrationDateConstraint, Semester> {
+public class RegistrationDateValidator
+	implements ConstraintValidator<RegistrationDateConstraint, Semester> {
 
-    @Override
-    public boolean isValid(Semester s, ConstraintValidatorContext context) {
-        if (s == null) return true;
-        if (s.getStartDate() != null && s.getEndDate() != null) {
-            if (!s.getStartDate().isBefore(s.getEndDate())) {
-                return buildError(context, "END_DATE_BEFORE_START_DATE"); 
-            }
-        }
+@Override
+public boolean isValid(Semester s, ConstraintValidatorContext context) {
+	if (s == null) return true;
+	if (s.getStartDate() != null && s.getEndDate() != null) {
+	if (!s.getStartDate().isBefore(s.getEndDate())) {
+		return buildError(context, "END_DATE_BEFORE_START_DATE");
+	}
+	}
 
-        if (s.getRegistrationStartDate() != null && s.getRegistrationEndDate() != null) {
-            if (!s.getRegistrationStartDate().isBefore(s.getRegistrationEndDate())) {
-                return buildError(context, "REG_END_BEFORE_REG_START");
-            }
-            
-            if (s.getRegistrationEndDate().toLocalDate().isAfter(s.getStartDate())) {
-                return buildError(context, "REG_END_AFTER_START_DATE");
-            }
-        }
+	if (s.getRegistrationStartDate() != null && s.getRegistrationEndDate() != null) {
+	if (!s.getRegistrationStartDate().isBefore(s.getRegistrationEndDate())) {
+		return buildError(context, "REG_END_BEFORE_REG_START");
+	}
 
-        return true;
-    }
+	if (s.getRegistrationEndDate().toLocalDate().isAfter(s.getStartDate())) {
+		return buildError(context, "REG_END_AFTER_START_DATE");
+	}
+	}
 
-    private boolean buildError(ConstraintValidatorContext context, String message) {
-        context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
-        return false;
-    }
+	return true;
+}
+
+private boolean buildError(ConstraintValidatorContext context, String message) {
+	context.disableDefaultConstraintViolation();
+	context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
+	return false;
+}
 }

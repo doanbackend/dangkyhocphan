@@ -1,21 +1,20 @@
 package space.emdon.dangkyhocphan.coreeducations.subject;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 
 @Repository
-
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
-    Optional<Subject> findByName(String name);
+Optional<Subject> findByName(String name);
 
-    boolean existsByName(String name);
-    boolean existsByCode(String code);
-    boolean existsByCodeAndName(String code, String name);
-    void deleteByCode(String code);
+boolean existsByName(String name);
 
-    Optional<Subject> findByCode(String code);
+boolean existsByCode(String code);
 
+boolean existsByCodeAndName(String code, String name);
+
+void deleteByCode(String code);
+
+Optional<Subject> findByCode(String code);
 }

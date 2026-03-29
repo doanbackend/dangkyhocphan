@@ -1,16 +1,12 @@
 package space.emdon.dangkyhocphan.rbac.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import space.emdon.dangkyhocphan.rbac.role.RoleResponse;
 import space.emdon.dangkyhocphan.coreeducations.sectionclass.SectionclassResponse;
-import java.time.LocalDate;
-import java.util.Set;
+import space.emdon.dangkyhocphan.rbac.role.RoleResponse;
 
 @Data
 @Builder
@@ -19,13 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    String id;
-    String username;
-    String numberid;
-    String email;
-    String password;
-    String phone;
-    LocalDate dob;
-    Set<RoleResponse> roles;
-    Set<SectionclassResponse> Sectionclass;
+String id;
+String name;
+String numberid;
+String email;
+String password;
+String phone;
+LocalDate dob;
+Set<RoleResponse> roles;
+Set<SectionclassResponse> Sectionclass;
 }

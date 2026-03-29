@@ -1,48 +1,50 @@
 package space.emdon.dangkyhocphan.service;
 
-import lombok.AccessLevel;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.*;
 import java.text.ParseException;
 import java.time.*;
-import java.util.*;
 import java.time.temporal.ChronoUnit;
+import java.util.*;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import space.emdon.dangkyhocphan.rbac.user.User;
-import space.emdon.dangkyhocphan.validator.TokenValidator;
 import space.emdon.dangkyhocphan.dto.request.*;
 import space.emdon.dangkyhocphan.dto.response.*;
 import space.emdon.dangkyhocphan.exception.*;
-import space.emdon.dangkyhocphan.rbac.user.UserRepository;
 import space.emdon.dangkyhocphan.rbac.role.Role;
-import lombok.RequiredArgsConstructor;
+import space.emdon.dangkyhocphan.rbac.user.User;
+import space.emdon.dangkyhocphan.rbac.user.UserRepository;
+import space.emdon.dangkyhocphan.validator.TokenValidator;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
 
-    final UserRepository userRepository;
-    final TokenValidator tokenValidator;
-    final PasswordEncoder passwordEncoder;
-    @NonFinal
-    @Value("${spring.jwt.SIGNER_KEY}")
-    protected String SIGNER_KEY;
+final UserRepository userRepository;
+final TokenValidator tokenValidator;
+final PasswordEncoder passwordEncoder;
 
-    @NonFinal
-    @Value("${spring.jwt.valid_duration}")
-    protected String VALID_DURATION;
+@NonFinal
+@Value("${spring.jwt.SIGNER_KEY}")
+protected String SIGNER_KEY;
 
-    @NonFinal
-    @Value("${spring.jwt.refreshable_duration}")
-    protected String REFRESHABLE_DURATION;
-    
-    public IntrospectResponse introspect(IntrospectRequest request)
+@NonFinal
+@Value("${spring.jwt.valid_duration}")
+protected String VALID_DURATION;
+
+@NonFinal
+@Value("${spring.jwt.refreshable_duration}")
+protected String REFRESHABLE_DURATION;
+
+public IntrospectResponse introspect(IntrospectRequest request)
 	throws JOSEException, ParseException {
 	try {
 	tokenValidator.verifyToken(request.getToken(), false);
@@ -95,7 +97,7 @@ private String generateToken(User user) {
 	JWTClaimsSet claimsSet =
 		new JWTClaimsSet.Builder()
 			.subject(user.getEmail())
-			.issuer("douong")
+			.issuer("emdon")
 			.jwtID(UUID.randomUUID().toString())
 			.issueTime(new Date())
 			.expirationTime(
@@ -135,5 +137,4 @@ private String buildScope(User user) {
 	}
 	return stringJoiner.toString();
 }
-
 }

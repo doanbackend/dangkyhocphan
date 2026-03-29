@@ -1,9 +1,8 @@
 package space.emdon.dangkyhocphan.rbac.role;
 
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -12,8 +11,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleRequest {
 
-    String name;
-    String description;
-    Set<String> permissions;
-
+String name;
+String description;
+Set<String> permissions;
 }

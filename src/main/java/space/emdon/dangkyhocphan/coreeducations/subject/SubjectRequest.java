@@ -11,13 +11,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SubjectRequest {
-    @NotBlank(message = "SUBJECT_CODE_REQUIRED")
-    String code;
+@NotBlank(message = "SUBJECT_CODE_REQUIRED")
+String code;
 
-    @NotBlank(message = "SUBJECT_NAME_REQUIRED")
-    String name;
+@NotBlank(message = "SUBJECT_NAME_REQUIRED")
+String name;
 
-    @Min(value = 1, message = "CREDITS_INVALID")
-    int credits;
-
+@Min(value = 1, message = "CREDITS_INVALID")
+int credits;
 }

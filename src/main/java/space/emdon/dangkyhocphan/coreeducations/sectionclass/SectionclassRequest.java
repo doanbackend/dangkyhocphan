@@ -1,8 +1,8 @@
 package space.emdon.dangkyhocphan.coreeducations.sectionclass;
 
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.util.Set;
 import space.emdon.dangkyhocphan.coreeducations.schedule.ScheduleRequest;
 
 @Data
@@ -12,10 +12,9 @@ import space.emdon.dangkyhocphan.coreeducations.schedule.ScheduleRequest;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SectionclassRequest {
 
-    Long subjectId;
-    String instructorId;
-    Long semesterId;
-    int maxStudents;
-    Set<ScheduleRequest> schedules;
-
+String subjectCode; // Subject.code
+String lecturerNumberId; // User.numberid
+String semesterName; // Semester.name
+int maxStudents;
+Set<ScheduleRequest> schedules;
 }

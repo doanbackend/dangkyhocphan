@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DangkyhocphanApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DangkyhocphanApplication.class, args);
-	}
-
+public static void main(String[] args) {
+	SpringApplication.run(DangkyhocphanApplication.class, args);
+}
 }

@@ -7,5 +7,5 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class RefreshRequest {
-    String token;
+String token;
 }

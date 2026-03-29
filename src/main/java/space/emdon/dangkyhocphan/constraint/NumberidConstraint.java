@@ -11,12 +11,12 @@ import space.emdon.dangkyhocphan.validator.NumberidValidator;
 
 @Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {NumberidValidator.class}) 
+@Constraint(validatedBy = {NumberidValidator.class})
 public @interface NumberidConstraint {
-    
-    String message() default "Mã số không hợp lệ, chỉ được chứa các ký tự số";
 
-    Class<?>[] groups() default {};
+String message() default "Mã số không hợp lệ, chỉ được chứa các ký tự số";
 
-    Class<? extends Payload>[] payload() default {};
+Class<?>[] groups() default {};
+
+Class<? extends Payload>[] payload() default {};
 }

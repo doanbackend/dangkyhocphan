@@ -3,12 +3,14 @@ package space.emdon.dangkyhocphan.coreeducations.schedule;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.DayOfWeek;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +19,6 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
 
-import java.time.DayOfWeek;
-
 @Entity
 @Getter
 @Setter
@@ -26,24 +26,22 @@ import java.time.DayOfWeek;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-@Table(uniqueConstraints = {
-    @UniqueConstraint(columnNames = {
-        "dayOfWeek", "startPeriod", "endPeriod", "section_class_id"
-    })
-})
+@Table(
+	uniqueConstraints = {
+	@UniqueConstraint(columnNames = {"dayOfWeek", "startPeriod", "endPeriod", "section_class_id"})
+	})
 public class Schedule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+Long id;
 
-    @Enumerated(EnumType.STRING)
-    DayOfWeek dayOfWeek;
-    
-    int startPeriod;
-    int endPeriod;
-    String room;
+@Enumerated(EnumType.STRING)
+DayOfWeek dayOfWeek;
 
-    @ManyToOne
-    Sectionclass sectionClass;
+int startPeriod;
+int endPeriod;
+String room;
 
+@ManyToOne(fetch = FetchType.EAGER)
+Sectionclass sectionClass;
 }

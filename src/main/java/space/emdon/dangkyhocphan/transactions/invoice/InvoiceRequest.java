@@ -1,9 +1,8 @@
 package space.emdon.dangkyhocphan.transactions.invoice;
 
+import java.time.LocalDate;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -12,9 +11,8 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class InvoiceRequest {
 
-    String studentId;
-    Long semesterId;
-    Boolean paid;
-    LocalDate paymentDate;
-
+String studentNumberId;
+String semesterName;
+Boolean paid;
+LocalDate paymentDate;
 }

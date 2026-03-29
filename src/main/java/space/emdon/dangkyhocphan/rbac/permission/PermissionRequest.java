@@ -10,9 +10,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PermissionRequest {
-    @NotBlank(message = "PERMISSION_NAME_REQUIRED")
-    String name;
+@NotBlank(message = "PERMISSION_NAME_REQUIRED")
+String name;
 
-    String description;
-
+String description;
 }

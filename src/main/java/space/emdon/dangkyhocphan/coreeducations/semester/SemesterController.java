@@ -1,11 +1,11 @@
 package space.emdon.dangkyhocphan.coreeducations.semester;
-import lombok.extern.slf4j.Slf4j;
-import space.emdon.dangkyhocphan.dto.response.ApiResponse;
-import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import java.util.List;
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+import space.emdon.dangkyhocphan.dto.response.ApiResponse;
 
 @Slf4j
 @RestController
@@ -14,33 +14,34 @@ import java.util.List;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class SemesterController {
 
+final SemesterService semesterService;
 
-    SemesterService semesterService;
+@PostMapping
+ApiResponse<SemesterResponse> createSemester(@RequestBody SemesterRequest request) {
+	return ApiResponse.<SemesterResponse>builder()
+		.result(semesterService.createSemester(request))
+		.build();
+}
 
-    @PostMapping
-    ApiResponse<SemesterResponse> createSemester(@RequestBody SemesterRequest request) {
-        return ApiResponse.<SemesterResponse>builder().result(semesterService.createSemester(request)).build();
-    }
+@GetMapping
+ApiResponse<List<SemesterResponse>> getAllSemesters() {
+	return ApiResponse.<List<SemesterResponse>>builder()
+		.result(semesterService.getAllSemesters())
+		.build();
+}
 
-    @GetMapping
-    ApiResponse<List<SemesterResponse>> getAllSemesters() {
-        return ApiResponse.<List<SemesterResponse>>builder()
-                .result(semesterService.getAllSemesters())
-                .build();
-    }
-    
-    @PutMapping("/{name}")
-    ApiResponse<SemesterResponse> updateSemester(@PathVariable String name, @RequestBody SemesterRequest request) {
-        return ApiResponse.<SemesterResponse>builder()
-                .result(semesterService.updateSemester(request))
-                .build();
-    }
+@PutMapping("/{name}")
+ApiResponse<SemesterResponse> updateSemester(
+	@PathVariable String name, @RequestBody SemesterRequest request) {
+	return ApiResponse.<SemesterResponse>builder()
+		.result(semesterService.updateSemester(request))
+		.build();
+}
 
-    @DeleteMapping("/{name}")
-    public void deleteSemester(@PathVariable String name) {
-        SemesterRequest request = new SemesterRequest();
-        request.setName(name);
-        semesterService.deleteSemester(request);
-    }
-
+@DeleteMapping("/{name}")
+public void deleteSemester(@PathVariable String name) {
+	SemesterRequest request = new SemesterRequest();
+	request.setName(name);
+	semesterService.deleteSemester(request);
+}
 }

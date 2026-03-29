@@ -11,7 +11,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegistrationRequest {
 
-    @NotBlank(message = "SECTION_CLASS_ID_REQUIRED")
-    Long sectionClassId;
+@NotBlank(message = "STUDENT_NUMBER_ID_REQUIRED")
+String studentNumberId;
 
+@NotBlank(message = "SECTION_CLASS_ID_REQUIRED")
+String sectionClassId;
 }

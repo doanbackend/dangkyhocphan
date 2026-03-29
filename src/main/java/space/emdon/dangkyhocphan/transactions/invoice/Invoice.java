@@ -1,14 +1,15 @@
 package space.emdon.dangkyhocphan.transactions.invoice;
-import java.time.LocalDate;
-import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,8 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import space.emdon.dangkyhocphan.coreeducations.semester.Semester;
 import space.emdon.dangkyhocphan.rbac.user.User;
-import jakarta.persistence.GenerationType;
 import space.emdon.dangkyhocphan.transactions.registration.Registration;
+
 @Entity
 @Getter
 @Setter
@@ -27,27 +28,25 @@ import space.emdon.dangkyhocphan.transactions.registration.Registration;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class Invoice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+@Id
+@GeneratedValue(strategy = GenerationType.UUID)
+String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id")
-    User student;
+@ManyToOne(fetch = FetchType.EAGER)
+@JoinColumn(name = "student_id")
+User student;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id")
-    Set<Registration> registrations;
+@OneToMany(fetch = FetchType.EAGER)
+@JoinColumn(name = "invoice_id")
+Set<Registration> registrations;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "semester_id")
-    Semester semester;
+@ManyToOne(fetch = FetchType.EAGER)
+@JoinColumn(name = "semester_id")
+Semester semester;
 
-    Long totalAmount;
+@Builder.Default Long totalAmount = 0L;
 
-    Boolean paid = false;
+@Builder.Default Boolean paid = false;
 
-    LocalDate paymentDate;
-
-
+LocalDate paymentDate;
 }
