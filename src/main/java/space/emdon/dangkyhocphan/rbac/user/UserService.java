@@ -103,7 +103,7 @@ public UserResponse getMyInfo(Authentication authentication) {
 }
 
 @PreAuthorize("hasAuthority('UPDATE_USER')")
-public User updateUser(String numbered, UserRequest request) {
+public UserResponse updateUser(String numbered, UserRequest request) {
 
 	if (request.getEmail() == null || request.getEmail().isBlank()) {
 	throw new AppException(ErrorCode.EMAIL_INVALID);
@@ -115,7 +115,8 @@ public User updateUser(String numbered, UserRequest request) {
 	user.setPassword(passwordEncoder.encode(request.getPassword()));
 	var roles = roleRepository.findAllById(request.getRoles());
 	user.setRoles(new HashSet<>(roles));
-	return userRepository.save(user);
+	User updatedUser = userRepository.save(user);
+	return userMapper.toUserResponse(updatedUser);
 }
 
 @PreAuthorize("hasAuthority('DELETE_USER')")

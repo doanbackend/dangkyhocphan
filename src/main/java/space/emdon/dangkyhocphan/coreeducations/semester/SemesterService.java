@@ -34,12 +34,11 @@ public List<SemesterResponse> getAllSemesters() {
 }
 
 @PreAuthorize("hasRole('ADMIN')")
-public void deleteSemester(SemesterRequest request) {
+public void deleteSemester(String name) {
 	Semester semester =
 		semesterRepository
-			.findByName(request.getName())
-			.orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
-
+			.findByName(name)
+			.orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND));
 	semesterRepository.delete(semester);
 }
 

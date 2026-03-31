@@ -25,7 +25,7 @@ public class SubjectController {
 final SubjectService subjectService;
 
 @PostMapping
-ApiResponse<SubjectResponse> createSubject(@RequestBody SubjectRequest request) {
+ApiResponse<SubjectResponse> createSubject(@RequestBody @Valid SubjectRequest request) {
 	return ApiResponse.<SubjectResponse>builder()
 		.result(subjectService.createSubject(request))
 		.build();
@@ -38,6 +38,13 @@ ApiResponse<List<SubjectResponse>> getAll() {
 		.build();
 }
 
+@GetMapping("/{code}")
+public ApiResponse<SubjectResponse> getSubject(@PathVariable String code) {
+	return ApiResponse.<SubjectResponse>builder()
+		.result(subjectService.getSubjectById(code))
+		.build();
+}
+
 @PutMapping("/{code}")
 public ApiResponse<SubjectResponse> updateSubject(
 	@PathVariable String code, @RequestBody @Valid SubjectRequest request) {
@@ -47,7 +54,7 @@ public ApiResponse<SubjectResponse> updateSubject(
 }
 
 @DeleteMapping("/{code}")
-public void delete(@PathVariable String code) {
+public void deleteSubject(@PathVariable String code) {
 	subjectService.deleteSubject(code);
 }
 }

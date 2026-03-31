@@ -105,7 +105,6 @@ public class UserServiceTest {
     @Test
     @WithMockUser(authorities = "CREATE_USER")
     void createUserService_invalidRequest_success() throws Exception {
-
         when(userRepository.existsByName(anyString())).thenReturn(false);
         Role role = Role.builder().name("STUDENT").build();
         when(roleRepository.findByName(any())).thenReturn(Optional.of(role));
@@ -115,8 +114,6 @@ public class UserServiceTest {
         var response = userService.createUser(userRequest);
         assertThat(response.getId()).isEqualTo("100");
         assertThat(response.getName()).isEqualTo("TestUser");
-
-
     }
     @Test
     @WithMockUser(authorities = "CREATE_USER")
@@ -124,10 +121,8 @@ public class UserServiceTest {
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
         var exception = assertThrows(AppException.class,
             ()->userService.createUser(userRequest));
-
         assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
     }
-
     @Test
     @WithMockUser(authorities = "UPDATE_USER")
     void updateUserService_validRequest_success() throws Exception {
@@ -208,7 +203,6 @@ public class UserServiceTest {
     void getStudents_success() {
         when(userRepository.findStudents()).thenReturn(List.of(user));
         when(userMapper.toUserResponse(any())).thenReturn(userResponse);
-
         var response = userService.getStudents();
         assertThat(response).hasSize(1);
     }
@@ -218,11 +212,9 @@ public class UserServiceTest {
         String id = "100";
         when(userRepository.findById(id)).thenReturn(java.util.Optional.of(user));
         when(userMapper.toUserResponse(any())).thenReturn(userResponse);
-
         var response = userService.getUserById(id);
         assertThat(response.getId()).isEqualTo("100");
     }
-
     @Test
     @WithMockUser(authorities = "READ_STUDENT")
     void getUserById_invalidId_fail() {
@@ -278,7 +270,6 @@ public class UserServiceTest {
                 .id(userId)
                 .roles(Set.of(adminRole))
                 .build();
-
         when(userRepository.findById(userId)).thenReturn(Optional.of(adminUser));
 
         var exception = assertThrows(org.springframework.security.access.AccessDeniedException.class,
@@ -287,6 +278,4 @@ public class UserServiceTest {
         assertThat(exception.getMessage()).isEqualTo("Cannot delete ADMIN user");
         Mockito.verify(userRepository, Mockito.never()).delete(any());
     }
-
-
 }

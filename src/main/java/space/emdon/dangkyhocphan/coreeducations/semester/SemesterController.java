@@ -1,6 +1,8 @@
 package space.emdon.dangkyhocphan.coreeducations.semester;
 
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,7 @@ public class SemesterController {
 final SemesterService semesterService;
 
 @PostMapping
-ApiResponse<SemesterResponse> createSemester(@RequestBody SemesterRequest request) {
+ApiResponse<SemesterResponse> createSemester(@RequestBody @Valid SemesterRequest request) {
 	return ApiResponse.<SemesterResponse>builder()
 		.result(semesterService.createSemester(request))
 		.build();
@@ -32,7 +34,7 @@ ApiResponse<List<SemesterResponse>> getAllSemesters() {
 
 @PutMapping("/{name}")
 ApiResponse<SemesterResponse> updateSemester(
-	@PathVariable String name, @RequestBody SemesterRequest request) {
+	@PathVariable String name, @RequestBody @Valid SemesterRequest request) {
 	return ApiResponse.<SemesterResponse>builder()
 		.result(semesterService.updateSemester(request))
 		.build();
@@ -40,8 +42,6 @@ ApiResponse<SemesterResponse> updateSemester(
 
 @DeleteMapping("/{name}")
 public void deleteSemester(@PathVariable String name) {
-	SemesterRequest request = new SemesterRequest();
-	request.setName(name);
-	semesterService.deleteSemester(request);
+	semesterService.deleteSemester(name);
 }
 }

@@ -82,8 +82,8 @@ ApiResponse<UserResponse> getMyInfo() {
 }
 
 @PutMapping("/{id}")
-ApiResponse<User> updateUser(@PathVariable String id, @RequestBody @Valid UserRequest request) {
-	return ApiResponse.<User>builder().result(userService.updateUser(id, request)).build();
+ApiResponse<UserResponse> updateUser(@PathVariable String id, @RequestBody @Valid UserRequest request) {
+	return ApiResponse.<UserResponse>builder().result(userService.updateUser(id, request)).build();
 }
 
 @DeleteMapping("/{id}")

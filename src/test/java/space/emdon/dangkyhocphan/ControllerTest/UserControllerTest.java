@@ -6,8 +6,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,12 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import space.emdon.dangkyhocphan.rbac.role.RoleResponse;
+import space.emdon.dangkyhocphan.rbac.user.User;
 import space.emdon.dangkyhocphan.rbac.user.UserRequest;
 import space.emdon.dangkyhocphan.rbac.user.UserResponse;
 import space.emdon.dangkyhocphan.rbac.user.UserService;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -80,10 +77,8 @@ public class UserControllerTest {
     @Test
     @WithMockUser
     void createUserController_invalidRequest_success() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
         String content = objectMapper.writeValueAsString(userRequest);
-        Mockito.when(userService.createUser(any()))
+        when(userService.createUser(any()))
                         .thenReturn(userResponse);
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/users")
@@ -91,26 +86,26 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
+                .andExpect(MockMvcResultMatchers.jsonPath("$code")
                         .value(1000))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.id")
+                .andExpect(MockMvcResultMatchers.jsonPath("$result.id")
                         .value("100"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.name")
+                .andExpect(MockMvcResultMatchers.jsonPath("$result.name")
                         .value("TestUser"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.numbered")
+                .andExpect(MockMvcResultMatchers.jsonPath("$result.numbered")
                         .value("21"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.email")
+                .andExpect(MockMvcResultMatchers.jsonPath("$result.email")
                         .value("TestUser@gmail.com"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.phone")
+                .andExpect(MockMvcResultMatchers.jsonPath("$result.phone")
                         .value("0987654321"))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.dob")
+                .andExpect(MockMvcResultMatchers.jsonPath("$result.dob")
                         .value("2000-01-01"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.roles[*].name", Matchers.hasItem("STUDENT")))
         ;
     }
     @Test
     @WithMockUser
-    void createUserController_usernameInvalid_fail() throws Exception {
+    void createUserController_nameInvalid_fail() throws Exception {
         userRequest.setName("4VKT");
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -121,7 +116,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
+                .andExpect(MockMvcResultMatchers.jsonPath("$code")
                         .value(1003))
 
         ;
@@ -141,9 +136,7 @@ public class UserControllerTest {
     @WithMockUser
     void createUserController_dobInvalid_fail() throws Exception {
         userRequest.setDob(LocalDate.of(2020, 1, 1));
-
         String content = objectMapper.writeValueAsString(userRequest);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -151,19 +144,19 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
     @Test
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser
     void getAllUsers_controller_success() throws Exception {
         when(userService.getAllUsers()).thenReturn(List.of(userResponse));
         mockMvc.perform(MockMvcRequestBuilders.get("/users")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].name")
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result[*].name")
                         .value("TestUser"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].id")
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result[*].id")
                         .value("100"));
     }
     @Test
-    @WithMockUser(authorities = "READ_USER")
+    @WithMockUser
     void getUsers_controller_success() throws Exception {
         when(userService.getUsers()).thenReturn(List.of(userResponse));
         mockMvc.perform(MockMvcRequestBuilders.get("/users/normal")
@@ -172,7 +165,7 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result").isArray());
     }
     @Test
-    @WithMockUser(authorities = "READ_STUDENT")
+    @WithMockUser
     void getUserById_controller_success() throws Exception {
         String userId = "100";
         when(userService.getUserById(userId)).thenReturn(userResponse);
@@ -185,7 +178,7 @@ public class UserControllerTest {
                         .value("TestUser@gmail.com"));
     }
     @Test
-    @WithMockUser(username = "TestUser@gmail.com")
+    @WithMockUser
     void getMyInfo_controller_success() throws Exception {
         when(userService.getMyInfo(any())).thenReturn(userResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/users/myinfo")
@@ -197,7 +190,7 @@ public class UserControllerTest {
                         .value("TestUser"));
     }
     @Test
-    @WithMockUser(authorities = "READ_STUDENT")
+    @WithMockUser
     void getStudents_controller_success() throws Exception {
         when(userService.getStudents()).thenReturn(List.of(userResponse));
         mockMvc.perform(MockMvcRequestBuilders.get("/users/students")
@@ -212,13 +205,11 @@ public class UserControllerTest {
                         .value("TestUser@gmail.com"));
     }
     @Test
-    @WithMockUser(authorities = "UPDATE_USER")
+    @WithMockUser
     void updateUser_controller_success() throws Exception {
         String userId = "21";
-        when(userService.updateUser(eq(userId), any())).thenReturn(new space.emdon.dangkyhocphan.rbac.user.User());
-
+        when(userService.updateUser(eq(userId), any())).thenReturn(userResponse);
         String content = objectMapper.writeValueAsString(userRequest);
-
         mockMvc.perform(MockMvcRequestBuilders.put("/users/{id}", userId)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -228,7 +219,7 @@ public class UserControllerTest {
                         .value(0));
     }
     @Test
-    @WithMockUser(authorities = "DELETE_USER")
+    @WithMockUser
     void deleteUser_controller_success() throws Exception {
         String userId = "100";
         Mockito.doNothing().when(userService).deleteUser(userId);
