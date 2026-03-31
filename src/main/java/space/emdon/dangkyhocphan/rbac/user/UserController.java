@@ -2,6 +2,8 @@ package space.emdon.dangkyhocphan.rbac.user;
 
 import jakarta.validation.Valid;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,8 +14,9 @@ import space.emdon.dangkyhocphan.dto.response.ApiResponse;
 @Slf4j
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 @Validated
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
 static final String LOG_USER_EMAIL_FORMAT = "Useremail: {}";
 

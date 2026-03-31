@@ -30,7 +30,7 @@ Long id;
 Subject subject;
 
 @ManyToOne(fetch = FetchType.EAGER)
-@JoinColumn(name = "instructor_numberid", referencedColumnName = "numberid")
+@JoinColumn(name = "instructor_numbered", referencedColumnName = "numbered")
 User instructor;
 
 @ManyToOne(fetch = FetchType.EAGER)

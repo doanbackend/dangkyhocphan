@@ -16,7 +16,7 @@ public interface InvoiceMapper {
 Invoice toInvoice(InvoiceRequest request);
 
 @Mapping(target = "studentName", source = "student.name")
-@Mapping(target = "msv", source = "student.numberid")
+@Mapping(target = "studentNumbered", source = "student.numbered")
 @Mapping(target = "semesterName", source = "semester.name")
 @Mapping(target = "totalAmount", source = "totalAmount")
 @Mapping(target = "paid", source = "paid")

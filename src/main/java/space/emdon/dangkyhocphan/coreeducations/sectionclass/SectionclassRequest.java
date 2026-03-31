@@ -12,9 +12,9 @@ import space.emdon.dangkyhocphan.coreeducations.schedule.ScheduleRequest;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SectionclassRequest {
 
-String subjectCode; // Subject.code
-String lecturerNumberId; // User.numberid
-String semesterName; // Semester.name
+String subjectCode;
+String lecturerNumbered;
+String semesterName;
 int maxStudents;
 Set<ScheduleRequest> schedules;
 }

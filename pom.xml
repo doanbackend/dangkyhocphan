@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.4</version>
+		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>space.emdon</groupId>
@@ -117,6 +117,7 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+
     </dependencies>
 
     <build>
@@ -165,12 +166,23 @@
                     </goals>
                     <configuration>
                         <excludes>
-                            <exclude>**/dto/**</exclude>
-                            <exclude>**/configuration/**</exclude>
+                            <exclude>**/*Config.class</exclude>
+                            <exclude>**/*Configuration.class</exclude>
+                            <exclude>**/*Jwt*.class</exclude>
+                            <exclude>**/*AuthenticationEntryPoint.class</exclude>
+                            <exclude>**/*DTO.class</exclude>
+                            <exclude>**/*Request.class</exclude>
+                            <exclude>**/*Response.class</exclude>
                             <exclude>**/entity/**</exclude>
-                            <exclude>**/mapper/**</exclude>
+                            <exclude>**/*Mapper*.class</exclude>
                             <exclude>**/enums/**</exclude>
-                            
+                            <exclude>**/*Exception.class</exclude>
+                            <exclude>**/*ErrorCode.class</exclude>
+                            <exclude>**/*GlobalException*.class</exclude>
+                            <exclude>**/*Validator.class</exclude>
+                            <exclude>**/*Constraint.class</exclude>
+                            <exclude>**/*Application.class</exclude>
+
                         </excludes>
                     </configuration>
                 </execution>

@@ -13,7 +13,7 @@ import space.emdon.dangkyhocphan.validator.PhoneValidator;
 @Retention(RUNTIME)
 @Constraint(validatedBy = {PhoneValidator.class})
 public @interface PhoneConstraint {
-String message() default "{PHONE_INVALID sai SDT}";
+String message() default "{PHONE_INVALID}";
 
 Class<?>[] groups() default {};
 

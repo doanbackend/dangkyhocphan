@@ -1,7 +1,10 @@
 package space.emdon.dangkyhocphan.exception;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import java.nio.file.AccessDeniedException;
+import java.util.Objects;
+
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -18,25 +21,25 @@ import space.emdon.dangkyhocphan.dto.response.ApiResponse;
 public class GlobalExceptionHandle {
 
 @ExceptionHandler(value = ConstraintViolationException.class)
-ResponseEntity<ApiResponse> handlingConstraitViolationException(
+ResponseEntity<ApiResponse<?>> handlingConstraintViolationException(
 	ConstraintViolationException exception) {
 	String message =
 		exception.getConstraintViolations().stream()
 			.findFirst()
-			.map(violation -> violation.getMessage())
+			.map(ConstraintViolation::getMessage)
 			.orElse(ErrorCode.INVALID_KEY.getMessage());
 
-	ApiResponse response = new ApiResponse<>();
+	ApiResponse<?> response = new ApiResponse<>();
 	response.setCode(ErrorCode.INVALID_KEY.getCode());
 	response.setMessage(message);
 	return ResponseEntity.badRequest().body(response);
 }
 
 @ExceptionHandler(value = Exception.class)
-ResponseEntity<ApiResponse> handlingException(Exception exception) {
+ResponseEntity<ApiResponse<?>> handlingException(Exception exception) {
 	log.error("EXCEPTION CLASS: {}", exception.getClass().getName());
 	log.error("EXCEPTION MESSAGE: {}", exception.getMessage(), exception);
-	ApiResponse response = new ApiResponse();
+	ApiResponse<?> response = new ApiResponse<>();
 	response.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
 	response.setMessage(
 		ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage() + " : " + exception.getMessage());
@@ -44,16 +47,16 @@ ResponseEntity<ApiResponse> handlingException(Exception exception) {
 }
 
 @ExceptionHandler(value = DataIntegrityViolationException.class)
-ResponseEntity<ApiResponse> handlingDataIntegrityViolation(
+ResponseEntity<ApiResponse<?>> handlingDataIntegrityViolation(
 	DataIntegrityViolationException exception) {
-	ApiResponse response = new ApiResponse();
+	ApiResponse<?> response = new ApiResponse<>();
 	response.setCode(ErrorCode.INVALID_KEY.getCode());
-	response.setMessage("Data integrity violation" + exception.getRootCause().getMessage());
+	response.setMessage("Data integrity violation" + Objects.requireNonNull(exception.getRootCause()).getMessage());
 	return ResponseEntity.status(ErrorCode.INVALID_KEY.getStatusCode()).body(response);
 }
 
 @ExceptionHandler(value = AccessDeniedException.class)
-ResponseEntity<ApiResponse> handlingAccessDeniedExceptionException(
+ResponseEntity<ApiResponse<?>> handlingAccessDeniedExceptionException(
 	AccessDeniedException exception) {
 	ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 	return ResponseEntity.status(errorCode.getStatusCode())
@@ -65,9 +68,9 @@ ResponseEntity<ApiResponse> handlingAccessDeniedExceptionException(
 }
 
 @ExceptionHandler(value = AppException.class)
-ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
+ResponseEntity<ApiResponse<?>> handlingAppException(AppException exception) {
 	ErrorCode errorCode = exception.getErrorCode();
-	ApiResponse response = new ApiResponse<>();
+	ApiResponse<?> response = new ApiResponse<>();
 	response.setCode(errorCode.getCode());
 	response.setMessage(errorCode.getMessage());
 	if (errorCode == ErrorCode.USER_NOT_EXIST || errorCode == ErrorCode.INVALID_CREDENTIAL) {
@@ -77,8 +80,8 @@ ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
 }
 
 @ExceptionHandler(value = MethodArgumentNotValidException.class)
-ResponseEntity<ApiResponse> handlingValidException(MethodArgumentNotValidException exception) {
-	var fieldError = exception.getBindingResult().getFieldErrors().get(0);
+ResponseEntity<ApiResponse<?>> handlingValidException(MethodArgumentNotValidException exception) {
+	var fieldError = exception.getBindingResult().getFieldErrors().getFirst();
 	String messagekey = fieldError.getDefaultMessage();
 	ErrorCode errorCode;
 	String errorMessage;
@@ -89,7 +92,7 @@ ResponseEntity<ApiResponse> handlingValidException(MethodArgumentNotValidExcepti
 	errorCode = ErrorCode.INVALID_KEY;
 	errorMessage = messagekey;
 	}
-	ApiResponse response =
+	ApiResponse<?> response =
 		ApiResponse.builder().code(errorCode.getCode()).message(errorMessage).build();
 	return ResponseEntity.badRequest().body(response);
 }

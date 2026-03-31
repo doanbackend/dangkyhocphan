@@ -29,15 +29,14 @@ SemesterRepository semesterRepository;
 public InvoiceResponse createInvoice(InvoiceRequest request) {
 	Invoice invoice = invoiceMapper.toInvoice(request);
 
-	// Fetch and set related entities
-	if (request.getStudentNumberId() != null) {
+	if (request.getStudentNumbered() != null) {
 	User student =
 		userRepository
-			.findByNumberid(request.getStudentNumberId())
+			.findByNumbered(request.getStudentNumbered())
 			.orElseThrow(
 				() ->
 					new RuntimeException(
-						"Student not found with numberId: " + request.getStudentNumberId()));
+						"Student not found with numberId: " + request.getStudentNumbered()));
 	invoice.setStudent(student);
 	}
 	if (request.getSemesterName() != null) {
@@ -75,14 +74,14 @@ public InvoiceResponse updateInvoice(String id, InvoiceRequest request) {
 	invoiceMapper.updateInvoice(invoice, request);
 
 	// Fetch and set related entities
-	if (request.getStudentNumberId() != null) {
+	if (request.getStudentNumbered() != null) {
 	User student =
 		userRepository
-			.findByNumberid(request.getStudentNumberId())
+			.findByNumbered(request.getStudentNumbered())
 			.orElseThrow(
 				() ->
 					new RuntimeException(
-						"Student not found with numberId: " + request.getStudentNumberId()));
+						"Student not found with numberId: " + request.getStudentNumbered()));
 	invoice.setStudent(student);
 	}
 	if (request.getSemesterName() != null) {

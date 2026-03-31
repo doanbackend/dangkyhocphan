@@ -14,7 +14,7 @@ import space.emdon.dangkyhocphan.constraint.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserRequest {
 @NotBlank(message = "NAME_REQUIRED")
-@Size(min = 5, message = "NAME_INCALID")
+@Size(min = 5, message = "NAME_INVALID")
 String name;
 
 @NotBlank(message = "EMAIL_REQUIRED")
@@ -27,7 +27,7 @@ String password;
 
 @Size(min = 2, max = 2, message = "NUMBER_ID_INVALID")
 @Pattern(regexp = "^[1-9][0-9]$", message = "NUMBER_ID_INVALID")
-String numberid;
+String numbered;
 
 @PhoneConstraint(message = "PHONE_INVALID")
 String phone;

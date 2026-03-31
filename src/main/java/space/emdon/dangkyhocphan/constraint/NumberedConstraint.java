@@ -5,18 +5,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import space.emdon.dangkyhocphan.validator.PhoneValidator;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import space.emdon.dangkyhocphan.validator.NumberedValidator;
+
 @Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {PhoneValidator.class})
-public @interface NumberidConstraint {
-    String message() default "{NUMBERID_INVALID}";
+@Constraint(validatedBy = {NumberedValidator.class})
+public @interface NumberedConstraint {
 
-    Class<?>[] groups() default {};
+String message() default "NUMBERED_INVALID";
 
-    Class<? extends Payload>[] payload() default {};
+Class<?>[] groups() default {};
+
+Class<? extends Payload>[] payload() default {};
 }

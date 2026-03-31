@@ -20,7 +20,7 @@ PASSWORD_INVALID(1006, "Password is invalid", HttpStatus.BAD_REQUEST),
 INVALID_CREDENTIAL(1007, "Invalid email or password", HttpStatus.UNAUTHORIZED),
 UNAUTHORIZED(1008, "Unauthorized", HttpStatus.FORBIDDEN),
 INVALID_TOKEN(1009, "Invalid token", HttpStatus.BAD_REQUEST),
-UNAUTHENTICATED(10010, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+UNAUTHENTICATED(1010, "Unauthenticated", HttpStatus.UNAUTHORIZED),
 APPLICATION_JSON_VALUE(
 	1011, "Content type must be application/json application/json", HttpStatus.BAD_REQUEST),
 PHONE_INVALID(1012, "Phone is invalid", HttpStatus.BAD_REQUEST),
@@ -46,7 +46,7 @@ ErrorCode(int code, String message, HttpStatusCode statusCode) {
 	this.statusCode = statusCode;
 }
 
-int code;
-String message;
-HttpStatusCode statusCode;
+final int code;
+final String message;
+final HttpStatusCode statusCode;
 }

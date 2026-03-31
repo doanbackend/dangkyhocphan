@@ -30,17 +30,17 @@ boolean existsConflict(
 
 @Query(
 	"SELECT COUNT(s) > 0 FROM Sectionclass s JOIN s.schedules sch "
-		+ "WHERE s.instructor.numberid = :instructorNumberId "
+		+ "WHERE s.instructor.numbered = :instructorNumbered "
 		+ "AND s.semester.name = :semesterName "
 		+ "AND sch.dayOfWeek = :dayOfWeek "
 		+ "AND sch.startPeriod <= :endP AND sch.endPeriod >= :startP")
 boolean existsInstructorConflict(
-	@Param("instructorNumberId") String instructorNumberId,
+	@Param("instructorNumbered") String instructorNumbered,
 	@Param("semesterName") String semesterName,
 	@Param("dayOfWeek") String dayOfWeek,
 	@Param("startP") int startP,
 	@Param("endP") int endP);
 
 @Query("SELECT s.currentStudents FROM Sectionclass s WHERE s.id = :sectionId")
-int getCurrentStudents(@Param("sectionId") String sectionId);
+int getCurrentStudents(@Param("sectionId") Long sectionId);
 }

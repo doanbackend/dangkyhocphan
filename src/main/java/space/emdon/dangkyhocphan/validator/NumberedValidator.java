@@ -2,12 +2,12 @@ package space.emdon.dangkyhocphan.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import space.emdon.dangkyhocphan.constraint.NumberidConstraint;
+import space.emdon.dangkyhocphan.constraint.NumberedConstraint;
 
-public class NumberidValidator implements ConstraintValidator<NumberidConstraint, String> {
+public class NumberedValidator implements ConstraintValidator<NumberedConstraint, String> {
 
 @Override
-public void initialize(NumberidConstraint constraintAnnotation) {}
+public void initialize(NumberedConstraint constraintAnnotation) {}
 
 @Override
 public boolean isValid(String value, ConstraintValidatorContext context) {

@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class InvoiceRequest {
 
-String studentNumberId;
+String studentNumbered;
 String semesterName;
 Boolean paid;
 LocalDate paymentDate;

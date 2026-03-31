@@ -14,7 +14,7 @@ public class SectionclassResponse {
 String id;
 Long subjectId;
 String subjectName;
-String lecturerId;
+String lecturerNumbered;
 String lecturerName;
 String semesterId;
 String semesterName;

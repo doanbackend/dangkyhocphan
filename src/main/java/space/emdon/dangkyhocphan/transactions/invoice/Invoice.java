@@ -33,7 +33,7 @@ public class Invoice {
 String id;
 
 @ManyToOne(fetch = FetchType.EAGER)
-@JoinColumn(name = "student_id")
+@JoinColumn(name = "student_numbered")
 User student;
 
 @OneToMany(fetch = FetchType.EAGER)

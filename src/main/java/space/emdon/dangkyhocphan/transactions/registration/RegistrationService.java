@@ -33,22 +33,22 @@ public RegistrationResponse createRegistration(RegistrationRequest request) {
 	if (request.getStudentNumberId() != null) {
 	User student =
 		userRepository
-			.findByNumberid(request.getStudentNumberId())
+			.findByNumbered(request.getStudentNumberId())
 			.orElseThrow(
 				() ->
 					new RuntimeException(
 						"Student not found with numberId: " + request.getStudentNumberId()));
 	registration.setStudent(student);
 	}
-	if (request.getSectionClassId() != null) {
+	if (request.getSectionclassId() != null) {
 	Sectionclass sectionClass =
 		sectionclassRepository
-			.findById(Long.valueOf(request.getSectionClassId()))
+			.findById(Long.valueOf(request.getSectionclassId()))
 			.orElseThrow(
 				() ->
 					new RuntimeException(
-						"SectionClass not found with id: " + request.getSectionClassId()));
-	registration.setSectionClass(sectionClass);
+						"SectionClass not found with id: " + request.getSectionclassId()));
+	registration.setSectionclass(sectionClass);
 	}
 
 	registration = registrationRepository.save(registration);
@@ -73,22 +73,22 @@ public RegistrationResponse updateRegistration(String id, RegistrationRequest re
 	if (request.getStudentNumberId() != null) {
 	User student =
 		userRepository
-			.findByNumberid(request.getStudentNumberId())
+			.findByNumbered(request.getStudentNumberId())
 			.orElseThrow(
 				() ->
 					new RuntimeException(
 						"Student not found with numberId: " + request.getStudentNumberId()));
 	registration.setStudent(student);
 	}
-	if (request.getSectionClassId() != null) {
+	if (request.getSectionclassId() != null) {
 	Sectionclass sectionClass =
 		sectionclassRepository
-			.findById(Long.valueOf(request.getSectionClassId()))
+			.findById(Long.valueOf(request.getSectionclassId()))
 			.orElseThrow(
 				() ->
 					new RuntimeException(
-						"SectionClass not found with id: " + request.getSectionClassId()));
-	registration.setSectionClass(sectionClass);
+						"SectionClass not found with id: " + request.getSectionclassId()));
+	registration.setSectionclass(sectionClass);
 	}
 
 	registration = registrationRepository.save(registration);

@@ -51,7 +51,6 @@ public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Excepti
 							.jwtAuthenticationConverter(jwtAuthenticationConverter()))
 				.authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 		
-	// NOSONAR: Disable CSRF because this is a stateless JWT-based API
 	httpSecurity.csrf(csrf -> csrf
 		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 		.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())

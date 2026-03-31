@@ -44,14 +44,14 @@ public SectionclassResponse createSectionclass(SectionclassRequest request) {
 						"Subject not found with code: " + request.getSubjectCode()));
 	sectionclass.setSubject(subject);
 	}
-	if (request.getLecturerNumberId() != null) {
+	if (request.getLecturerNumbered() != null) {
 	User instructor =
 		userRepository
-			.findByNumberid(request.getLecturerNumberId())
+			.findByNumbered(request.getLecturerNumbered())
 			.orElseThrow(
 				() ->
 					new RuntimeException(
-						"Instructor not found with numberId: " + request.getLecturerNumberId()));
+						"Instructor not found with numberId: " + request.getLecturerNumbered()));
 	sectionclass.setInstructor(instructor);
 	}
 	if (request.getSemesterName() != null) {
@@ -112,15 +112,15 @@ public SectionclassResponse updateSectionclass(String id, SectionclassRequest re
 							"Subject not found with code: " + request.getSubjectCode()));
 		sectionclass.setSubject(subject);
 	}
-	if (request.getLecturerNumberId() != null) {
+	if (request.getLecturerNumbered() != null) {
 		User instructor =
 			userRepository
-				.findByNumberid(request.getLecturerNumberId())
+				.findByNumbered(request.getLecturerNumbered())
 				.orElseThrow(
 					() ->
 						new RuntimeException(
 							"Instructor not found with numberId: "
-								+ request.getLecturerNumberId()));
+								+ request.getLecturerNumbered()));
 		sectionclass.setInstructor(instructor);
 	}
 	if (request.getSemesterName() != null) {

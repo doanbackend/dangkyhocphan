@@ -10,9 +10,9 @@ import space.emdon.dangkyhocphan.enums.RegistrationStatus;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegistrationResponse {
 String id;
-String studentId;
+String studentNumbered;
 String studentName;
-Long sectionClassId;
+Long sectionclassId;
 String subjectName;
 String room;
 RegistrationStatus status;

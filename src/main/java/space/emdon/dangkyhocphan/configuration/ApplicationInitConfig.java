@@ -2,8 +2,7 @@ package space.emdon.dangkyhocphan.configuration;
 
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +41,8 @@ private String ADMIN_PASSWORD;
 @Value("${spring.admin.phone}")
 private String ADMIN_PHONE;
 
-@Value("${spring.admin.numberid}")
-private String ADMIN_NUMBERID;
+@Value("${spring.admin.numbered}")
+private String ADMIN_NUMBERED;
 
 @Bean
 @Transactional
@@ -77,7 +76,7 @@ public ApplicationRunner applicationRunner() {
 				.email(ADMIN_EMAIL)
 				.password(passwordEncoder.encode(ADMIN_PASSWORD))
 				.phone(ADMIN_PHONE)
-				.numberid(ADMIN_NUMBERID)
+				.numbered(ADMIN_NUMBERED)
 				.dob(LocalDate.of(2003, 2, 28))
 				.roles(roles)
 				.build();

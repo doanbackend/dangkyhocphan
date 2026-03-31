@@ -15,5 +15,5 @@ public class RegistrationRequest {
 String studentNumberId;
 
 @NotBlank(message = "SECTION_CLASS_ID_REQUIRED")
-String sectionClassId;
+String sectionclassId;
 }

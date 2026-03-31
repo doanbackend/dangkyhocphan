@@ -13,23 +13,24 @@ boolean existsByEmail(String email);
 Optional<User> findByEmail(String email);
 
 @Query(
-	"""
-		SELECT u FROM User u
-		WHERE NOT EXISTS (
-			SELECT 1 FROM u.roles r WHERE r.name = 'ADMIN'
-		)
-	""")
+    """
+        SELECT u FROM User u
+        WHERE NOT EXISTS (
+            SELECT 1 FROM u.roles r WHERE r.name = 'ADMIN'
+        )
+    """)
 List<User> findUsers();
 
 @Query(
-	"""
-		SELECT DISTINCT u FROM User u
-		JOIN u.roles r
-		WHERE r.name = 'STUDENT'
-	""")
+    """
+        SELECT DISTINCT u FROM User u
+        JOIN u.roles r
+        WHERE r.name = 'STUDENT'
+    """)
 List<User> findStudents();
+boolean existsByName(String name);
 
-boolean existsByNumberid(String numberid);
+boolean existsByNumbered(String numbered);
 
-Optional<User> findByNumberid(String numberid);
+Optional<User> findByNumbered(String numbered);
 }

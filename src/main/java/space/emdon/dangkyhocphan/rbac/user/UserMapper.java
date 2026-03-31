@@ -24,7 +24,7 @@ public void setSectionclassRepository(SectionclassRepository sectionclassReposit
 }
 
 @Mapping(target = "roles", ignore = true)
-@Mapping(target = "numberid", ignore = true)
+@Mapping(target = "numbered", ignore = true)
 @Mapping(target = "password", ignore = true)
 public abstract User toUser(UserRequest request);
 
@@ -32,7 +32,7 @@ public abstract UserResponse toUserResponse(User user);
 
 @Mapping(target = "roles", ignore = true)
 @Mapping(target = "id", ignore = true)
-@Mapping(target = "numberid", ignore = true)
+@Mapping(target = "numbered", ignore = true)
 public abstract void updateUser(@MappingTarget User user, UserRequest request);
 
 protected Set<Sectionclass> mapAssignedClasses(Set<String> assignedClasses) {

@@ -29,19 +29,19 @@ import space.emdon.dangkyhocphan.rbac.user.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id", "section_class_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"student_numbered", "section_class_id"})})
 public class Registration {
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)
 private String id;
 
 @ManyToOne(fetch = FetchType.EAGER)
-@JoinColumn(name = "student_id")
+@JoinColumn(name = "student_numbered")
 private User student;
 
 @ManyToOne(fetch = FetchType.EAGER)
 @JoinColumn(name = "section_class_id")
-private Sectionclass sectionClass;
+private Sectionclass sectionclass;
 
 @Enumerated(EnumType.STRING)
 @Builder.Default

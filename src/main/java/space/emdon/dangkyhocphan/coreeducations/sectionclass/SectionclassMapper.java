@@ -18,7 +18,7 @@ Sectionclass toSectionClass(SectionclassRequest request);
 
 @Mapping(target = "subjectId", source = "subject.id")
 @Mapping(target = "subjectName", source = "subject.name")
-@Mapping(target = "lecturerId", source = "instructor.numberid")
+@Mapping(target = "lecturerNumbered", source = "instructor.numbered")
 @Mapping(target = "lecturerName", source = "instructor.name")
 @Mapping(target = "semesterId", source = "semester.name")
 @Mapping(target = "semesterName", source = "semester.name")

@@ -14,7 +14,7 @@ public class InvoiceResponse {
 
 String id;
 String studentName;
-String msv; // Mã sinh viên
+String studentNumbered;
 String semesterName;
 Long totalAmount;
 Boolean paid;

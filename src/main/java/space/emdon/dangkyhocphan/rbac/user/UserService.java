@@ -34,11 +34,11 @@ public UserResponse createUser(UserRequest request) {
 	throw new AppException(ErrorCode.EMAIL_EXISTED);
 	}
 
-	String finalNumberId = generateNumberid(request.getNumberid());
+	String finalNumberId = generateNumbered(request.getNumbered());
 
 	User user = userMapper.toUser(request);
 
-	user.setNumberid(finalNumberId);
+	user.setNumbered(finalNumberId);
 	user.setPassword(passwordEncoder.encode(request.getPassword()));
 
 	Role role =
@@ -49,12 +49,12 @@ public UserResponse createUser(UserRequest request) {
 
 	return userMapper.toUserResponse(userRepository.save(user));
 }
-private String generateNumberid(String prefix) {
+private String generateNumbered(String prefix) {
     while (true) {
         long randomPart = ThreadLocalRandom.current().nextLong(100_000_000L);
         String fullId = prefix + String.format("%08d", randomPart);
 
-        if (!userRepository.existsByNumberid(fullId)) {
+        if (!userRepository.existsByNumbered(fullId)) {
             return fullId;
         }
     }
@@ -87,8 +87,8 @@ public UserResponse getUserById(String id) {
 
 public UserResponse getMyInfo(Authentication authentication) {
 
-    if (authentication == null 
-        || !authentication.isAuthenticated() 
+    if (authentication == null
+        || !authentication.isAuthenticated()
         || "anonymousUser".equals(authentication.getPrincipal())) {
         throw new AppException(ErrorCode.UNAUTHENTICATED);
     }
@@ -103,14 +103,14 @@ public UserResponse getMyInfo(Authentication authentication) {
 }
 
 @PreAuthorize("hasAuthority('UPDATE_USER')")
-public User updateUser(String id, UserRequest request) {
+public User updateUser(String numbered, UserRequest request) {
 
 	if (request.getEmail() == null || request.getEmail().isBlank()) {
 	throw new AppException(ErrorCode.EMAIL_INVALID);
 	}
 
 	User user =
-		userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+		userRepository.findByNumbered(numbered).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 	userMapper.updateUser(user, request);
 	user.setPassword(passwordEncoder.encode(request.getPassword()));
 	var roles = roleRepository.findAllById(request.getRoles());

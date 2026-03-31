@@ -38,7 +38,7 @@ public class User {
 String id;
 
 @Column(length = 10, nullable = false, updatable = false, unique = true)
-String numberid;
+String numbered;
 
 String name;
 
