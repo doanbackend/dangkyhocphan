@@ -8,29 +8,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
-boolean existsByEmail(String email);
+boolean existsByPhone(String phone);
 
-Optional<User> findByEmail(String email);
-
-@Query(
-    """
-        SELECT u FROM User u
-        WHERE NOT EXISTS (
-            SELECT 1 FROM u.roles r WHERE r.name = 'ADMIN'
-        )
-    """)
-List<User> findUsers();
-
-@Query(
-    """
-        SELECT DISTINCT u FROM User u
-        JOIN u.roles r
-        WHERE r.name = 'STUDENT'
-    """)
-List<User> findStudents();
-boolean existsByName(String name);
-
-boolean existsByNumbered(String numbered);
-
+Optional<User> findByPhone(String phone);
 Optional<User> findByNumbered(String numbered);
+
+List<User> findAll();
+@Query("SELECT u FROM User u JOIN u.roles r WHERE r.name <> 'ADMIN'")
+List<User> findUsers();
+@Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = 'STUDENT'")
+List<User> findStudents();
+
+List<User> findByRolesName(String roleName);
+
+@Query("SELECT u FROM User u WHERE NOT EXISTS (SELECT r FROM u.roles r WHERE r.name = 'ADMIN')")
+List<User> findAllNonAdmin();
+boolean existsByNumbered(String numbered);
+boolean existsByRolesName(String roleName);
 }

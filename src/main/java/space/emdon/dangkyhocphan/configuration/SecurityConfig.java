@@ -51,10 +51,7 @@ public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Excepti
 							.jwtAuthenticationConverter(jwtAuthenticationConverter()))
 				.authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 		
-	httpSecurity.csrf(csrf -> csrf
-		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-		.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-	);
+	httpSecurity.csrf(csrf -> csrf.disable());
 	return httpSecurity.build();
 }
 

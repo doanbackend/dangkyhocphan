@@ -15,6 +15,7 @@ public interface InvoiceMapper {
 @Mapping(target = "registrations", ignore = true)
 Invoice toInvoice(InvoiceRequest request);
 
+@Mapping(target = "id", source = "id")
 @Mapping(target = "studentName", source = "student.name")
 @Mapping(target = "studentNumbered", source = "student.numbered")
 @Mapping(target = "semesterName", source = "semester.name")

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
 import space.emdon.dangkyhocphan.coreeducations.sectionclass.SectionclassRepository;
+import space.emdon.dangkyhocphan.exception.AppException;
+import space.emdon.dangkyhocphan.exception.ErrorCode;
 import space.emdon.dangkyhocphan.rbac.user.User;
 import space.emdon.dangkyhocphan.rbac.user.UserRepository;
 
@@ -28,26 +30,21 @@ SectionclassRepository sectionclassRepository;
 @PreAuthorize("hasAuthority('CREATE_REGISTRATION')")
 public RegistrationResponse createRegistration(RegistrationRequest request) {
 	Registration registration = registrationMapper.toRegistration(request);
-
-	// Fetch and set related entities
 	if (request.getStudentNumberId() != null) {
 	User student =
 		userRepository
 			.findByNumbered(request.getStudentNumberId())
 			.orElseThrow(
-				() ->
-					new RuntimeException(
-						"Student not found with numberId: " + request.getStudentNumberId()));
+				() -> new AppException(ErrorCode.USER_NOT_FOUND));
 	registration.setStudent(student);
 	}
 	if (request.getSectionclassId() != null) {
 	Sectionclass sectionClass =
 		sectionclassRepository
-			.findById(Long.valueOf(request.getSectionclassId()))
+			.findById(request.getSectionclassId())
 			.orElseThrow(
 				() ->
-					new RuntimeException(
-						"SectionClass not found with id: " + request.getSectionclassId()));
+					new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
 	registration.setSectionclass(sectionClass);
 	}
 
@@ -67,36 +64,34 @@ public RegistrationResponse updateRegistration(String id, RegistrationRequest re
 	Registration registration =
 		registrationRepository
 			.findById(id)
-			.orElseThrow(() -> new RuntimeException("Registration not found"));
-
-	// Fetch and set related entities
+			.orElseThrow(() -> new AppException(ErrorCode.REGISTRATION_NOT_EXIST));
 	if (request.getStudentNumberId() != null) {
 	User student =
 		userRepository
 			.findByNumbered(request.getStudentNumberId())
 			.orElseThrow(
 				() ->
-					new RuntimeException(
-						"Student not found with numberId: " + request.getStudentNumberId()));
+					new AppException(ErrorCode.USER_NOT_FOUND));
 	registration.setStudent(student);
 	}
 	if (request.getSectionclassId() != null) {
 	Sectionclass sectionClass =
 		sectionclassRepository
-			.findById(Long.valueOf(request.getSectionclassId()))
+			.findById(request.getSectionclassId())
 			.orElseThrow(
 				() ->
-					new RuntimeException(
-						"SectionClass not found with id: " + request.getSectionclassId()));
+					new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
 	registration.setSectionclass(sectionClass);
 	}
-
 	registration = registrationRepository.save(registration);
 	return registrationMapper.toRegistrationResponse(registration);
 }
 
 @PreAuthorize("hasRole('ADMIN')")
 public void deleteRegistration(String id) {
-	registrationRepository.deleteById(id);
+	Registration registration = registrationRepository
+	.findById(id)
+	.orElseThrow(() -> new AppException(ErrorCode.REGISTRATION_NOT_EXIST));
+	registrationRepository.delete(registration);
 }
 }

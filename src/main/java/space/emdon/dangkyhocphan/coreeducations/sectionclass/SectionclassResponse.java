@@ -11,8 +11,8 @@ import space.emdon.dangkyhocphan.coreeducations.schedule.ScheduleResponse;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SectionclassResponse {
-String id;
-Long subjectId;
+    String name;
+String subjectCode;
 String subjectName;
 String lecturerNumbered;
 String lecturerName;

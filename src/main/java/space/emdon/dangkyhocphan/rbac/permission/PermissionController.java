@@ -25,20 +25,20 @@ final PermissionService permissionService;
 @PostMapping
 ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request) {
 	return ApiResponse.<PermissionResponse>builder()
-		.result(permissionService.create(request))
+		.result(permissionService.createPermission(request))
 		.build();
 }
 
 @GetMapping
 ApiResponse<List<PermissionResponse>> getAll() {
 	return ApiResponse.<List<PermissionResponse>>builder()
-		.result(permissionService.getAll())
+		.result(permissionService.getAllPermission())
 		.build();
 }
 
 @DeleteMapping("/{name}")
 public ApiResponse<Void> delete(@PathVariable String name) {
-	permissionService.delete(name);
+	permissionService.deletePermission(name);
 	return ApiResponse.<Void>builder().build();
 }
 }

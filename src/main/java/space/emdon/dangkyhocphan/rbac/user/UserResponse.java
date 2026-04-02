@@ -18,7 +18,6 @@ public class UserResponse {
 String id;
 String name;
 String numbered;
-String email;
 String password;
 String phone;
 LocalDate dob;

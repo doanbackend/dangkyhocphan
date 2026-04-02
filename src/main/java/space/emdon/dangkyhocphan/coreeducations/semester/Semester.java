@@ -15,11 +15,9 @@ import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RegistrationDateConstraint
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Semester {
 @Id
-@Column(nullable = false)
 String name;
 
 @Column(nullable = false)

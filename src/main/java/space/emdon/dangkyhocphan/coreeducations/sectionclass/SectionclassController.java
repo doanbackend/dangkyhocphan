@@ -1,6 +1,8 @@
 package space.emdon.dangkyhocphan.coreeducations.sectionclass;
 
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +41,7 @@ ApiResponse<List<SectionclassResponse>> getAllSectionclasses() {
 
 @PutMapping("/{id}")
 ApiResponse<SectionclassResponse> updateSectionclass(
-	@PathVariable String id, @RequestBody SectionclassRequest request) {
+	@PathVariable String id, @RequestBody @Valid SectionclassRequest request) {
 	return ApiResponse.<SectionclassResponse>builder()
 		.result(sectionclassService.updateSectionclass(id, request))
 		.build();
@@ -47,6 +49,6 @@ ApiResponse<SectionclassResponse> updateSectionclass(
 
 @DeleteMapping("/{id}")
 public void deleteSectionclass(@PathVariable String id) {
-	sectionclassService.deleteSectionclassById(id);
+	sectionclassService.deleteSectionclassByName(id);
 }
 }

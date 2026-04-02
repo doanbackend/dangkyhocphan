@@ -27,5 +27,5 @@ int endPeriod;
 @NotBlank(message = "ROOM_REQUIRED")
 String room;
 
-String sectionClassId;
+String sectionclassName;
 }

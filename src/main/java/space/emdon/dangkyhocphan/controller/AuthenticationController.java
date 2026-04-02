@@ -22,33 +22,34 @@ import space.emdon.dangkyhocphan.service.AuthenticationService;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class AuthenticationController {
-final AuthenticationService authenticationService;
+    final AuthenticationService authenticationService;
+    @PostMapping("/login")
+    ApiResponse<AuthenticationResponse> authenticate(
+            @RequestBody @Valid AuthenticationRequest request) throws Exception, JOSEException {
+        var result = authenticationService.authenticate(request);
+        return ApiResponse.<AuthenticationResponse>builder().result(result).build();
+    }
 
-@PostMapping("/login")
-ApiResponse<AuthenticationResponse> authenticate(
-	@RequestBody @Valid AuthenticationRequest request) throws Exception, JOSEException {
-	var result = authenticationService.authenticate(request);
-	return ApiResponse.<AuthenticationResponse>builder().result(result).build();
-}
+    @PostMapping("/introspect")
+    ApiResponse<IntrospectResponse> introspect(@RequestBody @Valid IntrospectRequest request)
+            throws Exception, JOSEException {
+        var result = authenticationService.introspect(request);
+        return ApiResponse.<IntrospectResponse>builder().result(result).build();
+    }
 
-@PostMapping("/introspect")
-ApiResponse<IntrospectResponse> introspect(@RequestBody @Valid IntrospectRequest request)
-	throws Exception, JOSEException {
-	var result = authenticationService.introspect(request);
-	return ApiResponse.<IntrospectResponse>builder().result(result).build();
-}
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request)
+            throws Exception, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder().result(result).build();
+    }
 
-@PostMapping("/refresh")
-ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request)
-	throws Exception, JOSEException {
-	var result = authenticationService.refreshToken(request);
-	return ApiResponse.<AuthenticationResponse>builder().result(result).build();
-}
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws Exception, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder().build();
+    }
 
-@PostMapping("/logout")
-ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws Exception, JOSEException {
-	authenticationService.logout(request);
-	return ApiResponse.<Void>builder().build();
-}
 }

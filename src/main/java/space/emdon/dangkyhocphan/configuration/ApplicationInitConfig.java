@@ -32,9 +32,6 @@ final RoleRepository roleRepository;
 @Value("${spring.admin.name}")
 private String ADMIN_NAME;
 
-@Value("${spring.admin.email}")
-private String ADMIN_EMAIL;
-
 @Value("${spring.admin.password}")
 private String ADMIN_PASSWORD;
 
@@ -60,7 +57,7 @@ public ApplicationRunner applicationRunner() {
 		log.info("Admin role created");
 	}
 
-	if (userRepository.findByEmail(ADMIN_EMAIL).isEmpty()) {
+	if (userRepository.findByPhone(ADMIN_PHONE).isEmpty()) {
 
 		Role adminRole =
 			roleRepository
@@ -73,7 +70,6 @@ public ApplicationRunner applicationRunner() {
 		User user =
 			User.builder()
 				.name(ADMIN_NAME)
-				.email(ADMIN_EMAIL)
 				.password(passwordEncoder.encode(ADMIN_PASSWORD))
 				.phone(ADMIN_PHONE)
 				.numbered(ADMIN_NUMBERED)

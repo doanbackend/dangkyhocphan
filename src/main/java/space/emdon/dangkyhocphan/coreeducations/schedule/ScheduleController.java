@@ -42,7 +42,7 @@ ApiResponse<List<ScheduleResponse>> getAllSchedules() {
 
 @PutMapping("/{id}")
 ApiResponse<ScheduleResponse> updateSchedule(
-	@PathVariable String id, @RequestBody ScheduleRequest request) {
+	@PathVariable Long id, @RequestBody ScheduleRequest request) {
 	return ApiResponse.<ScheduleResponse>builder()
 		.result(scheduleService.updateSchedule(request))
 		.build();

@@ -14,12 +14,14 @@ Registration toRegistration(RegistrationRequest request);
 
 @Mapping(target = "studentNumbered", source = "student.numbered")
 @Mapping(target = "studentName", source = "student.name")
-@Mapping(target = "sectionclassId", source = "sectionclass.id")
+@Mapping(target = "sectionclassId", source = "sectionclass.name")
 @Mapping(target = "subjectName", source = "sectionclass.subject.name")
 @Mapping(
 	target = "room",
 	expression = "java(mapRoomFromSchedules(registration.getSectionclass()))")
 @Mapping(target = "status", source = "status")
+@Mapping(target = "id", source = "id")
+@Mapping(target = "registrationDateTime", source = "registrationDateTime")
 RegistrationResponse toRegistrationResponse(Registration registration);
 
 default String mapRoomFromSchedules(Sectionclass sectionclass) {

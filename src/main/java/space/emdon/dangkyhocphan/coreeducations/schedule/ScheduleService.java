@@ -8,49 +8,79 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.SectionclassRepository;
 import space.emdon.dangkyhocphan.exception.AppException;
 import space.emdon.dangkyhocphan.exception.ErrorCode;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class ScheduleService {
-ScheduleRepository scheduleRepository;
-ScheduleMapper scheduleMapper;
+    ScheduleRepository scheduleRepository;
+    ScheduleMapper scheduleMapper;
+    SectionclassRepository sectionclassRepository;
 
-@PreAuthorize("hasAuthority('CREATE_SCHEDULE')")
-public ScheduleResponse createSchedule(ScheduleRequest request) {
+    @PreAuthorize("hasAuthority('CREATE_SCHEDULE')")
+    public ScheduleResponse createSchedule(ScheduleRequest request) {
+        if (request.getStartPeriod() >= request.getEndPeriod()) {
+            throw new AppException(ErrorCode.INVALID_SCHEDULE_PERIOD);
+        }
+        Sectionclass sectionclass = sectionclassRepository.findById(request.getSectionclassName())
+                .orElseThrow(() -> new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
 
-	Schedule schedule = scheduleMapper.toSchedule(request);
-	schedule = scheduleRepository.save(schedule);
-	return scheduleMapper.toScheduleResponse(schedule);
-}
+        if (scheduleRepository.existsByDayOfWeekAndStartPeriodAndEndPeriodAndRoom(
+                request.getDayOfWeek(), request.getStartPeriod(), request.getEndPeriod(), request.getRoom())) {
+            throw new AppException(ErrorCode.SCHEDULE_ALREADY_EXISTS);
+        }
 
-@PreAuthorize("hasAuthority('GET_SCHEDULE')")
-public List<ScheduleResponse> getAllSchedules() {
-	return scheduleRepository.findAll().stream().map(scheduleMapper::toScheduleResponse).toList();
-}
+        Schedule schedule = scheduleMapper.toSchedule(request);
+        schedule.setSectionclass(sectionclass);
+        schedule = scheduleRepository.save(schedule);
+        return scheduleMapper.toScheduleResponse(schedule);
+    }
 
-@PreAuthorize("hasAuthority('DELETE_SCHEDULE')")
-public void deleteSchedule(Schedule scheduleFromRequest) {
-	Schedule schedule =
-		scheduleRepository
-			.findById(scheduleFromRequest.getId())
-			.orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
+    @PreAuthorize("hasAuthority('READ_SCHEDULE')")
+    public List<ScheduleResponse> getAllSchedules() {
+        return scheduleRepository.findAll().stream()
+            .map(scheduleMapper::toScheduleResponse)
+            .toList();
+    }
 
-	scheduleRepository.deleteById(schedule.getId());
-}
+    @PreAuthorize("hasAuthority('DELETE_SCHEDULE')")
+    public void deleteSchedule(Schedule scheduleFromRequest) {
+        Schedule schedule =
+            scheduleRepository
+                .findById(scheduleFromRequest.getId())
+                .orElseThrow(
+                    () -> new AppException(ErrorCode.SCHEDULE_NOT_EXIST));
 
-@PreAuthorize("hasAuthority('UPDATE_SCHEDULE')")
-public ScheduleResponse updateSchedule(ScheduleRequest request) {
-	Schedule schedule =
-		scheduleRepository
-			.findById(request.getId())
-			.orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND));
-	scheduleMapper.updateSchedule(schedule, request);
-	schedule = scheduleRepository.save(schedule);
-	return scheduleMapper.toScheduleResponse(schedule);
-}
+        scheduleRepository.deleteById(schedule.getId());
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_SCHEDULE')")
+    public ScheduleResponse updateSchedule(ScheduleRequest request) {
+        if (request.getStartPeriod() >= request.getEndPeriod()) {
+            throw new AppException(ErrorCode.INVALID_SCHEDULE_PERIOD);
+        }
+        
+        if (request.getSectionclassName() == null || request.getSectionclassName().isBlank()) {
+            throw new AppException(ErrorCode.SECTION_CLASS_NAME_REQUIRED);
+        }
+        
+        Sectionclass sectionclass = sectionclassRepository.findById(request.getSectionclassName())
+                .orElseThrow(() -> new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
+
+        Schedule schedule =
+            scheduleRepository
+                .findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_NOT_EXIST));
+        scheduleMapper.updateSchedule(schedule, request);
+        schedule.setSectionclass(sectionclass);
+        schedule = scheduleRepository.save(schedule);
+        return scheduleMapper.toScheduleResponse(schedule);
+    }
 }

@@ -7,7 +7,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface SectionclassMapper {
 
-@Mapping(target = "id", ignore = true)
+@Mapping(target = "name", source = "name")
 @Mapping(target = "subject", ignore = true)
 @Mapping(target = "instructor", ignore = true)
 @Mapping(target = "semester", ignore = true)
@@ -16,15 +16,19 @@ public interface SectionclassMapper {
 @Mapping(target = "currentStudents", constant = "0")
 Sectionclass toSectionClass(SectionclassRequest request);
 
-@Mapping(target = "subjectId", source = "subject.id")
+@Mapping(target = "subjectCode", source = "subject.code")
 @Mapping(target = "subjectName", source = "subject.name")
 @Mapping(target = "lecturerNumbered", source = "instructor.numbered")
 @Mapping(target = "lecturerName", source = "instructor.name")
 @Mapping(target = "semesterId", source = "semester.name")
 @Mapping(target = "semesterName", source = "semester.name")
+@Mapping(target = "maxStudents", source = "maxStudents")
+@Mapping(target = "currentStudents", source = "currentStudents")
+@Mapping(target = "schedules", ignore = true)
+@Mapping(target = "name", source = "name")
 SectionclassResponse toSectionClassResponse(Sectionclass sectionClass);
 
-@Mapping(target = "id", ignore = true)
+@Mapping(target = "name", ignore = true)
 @Mapping(target = "subject", ignore = true)
 @Mapping(target = "instructor", ignore = true)
 @Mapping(target = "semester", ignore = true)

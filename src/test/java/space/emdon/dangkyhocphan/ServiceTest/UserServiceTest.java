@@ -77,7 +77,6 @@ public class UserServiceTest {
         userRequest = UserRequest.builder()
                 .name("TestUser")
                 .numbered("21")
-                .email("TestUser@gmail.com")
                 .password("12345678")
                 .phone("0987654321")
                 .dob(dob)
@@ -87,7 +86,6 @@ public class UserServiceTest {
                 .id("100")
                 .name("TestUser")
                 .numbered("21")
-                .email("TestUser@gmail.com")
                 .phone("0987654321")
                 .dob(dob)
                 .roles(Set.of(roleResponse))
@@ -96,7 +94,6 @@ public class UserServiceTest {
                 .id("100")
                 .name("TestUser")
                 .numbered("21")
-                .email("TestUser@gmail.com")
                 .phone("0987654321")
                 .dob(dob)
                 .roles(Set.of(role))
@@ -114,14 +111,6 @@ public class UserServiceTest {
         var response = userService.createUser(userRequest);
         assertThat(response.getId()).isEqualTo("100");
         assertThat(response.getName()).isEqualTo("TestUser");
-    }
-    @Test
-    @WithMockUser(authorities = "CREATE_USER")
-    void createUserService_usernameException_fail() {
-        when(userRepository.existsByEmail(anyString())).thenReturn(true);
-        var exception = assertThrows(AppException.class,
-            ()->userService.createUser(userRequest));
-        assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
     }
     @Test
     @WithMockUser(authorities = "UPDATE_USER")
@@ -142,8 +131,8 @@ public class UserServiceTest {
     @WithMockUser(authorities = "UPDATE_USER")
     void updateUserService_usernameException_fail() {
         String userNumbered = "21";
-        userRequest.setEmail("");
-        when(userRepository.existsByEmail(anyString())).thenReturn(true);
+        userRequest.setNumbered("");
+        when(userRepository.existsByNumbered(anyString())).thenReturn(true);
         var exception = assertThrows(AppException.class,
                 ()->userService.updateUser(userNumbered, userRequest));
         assertThat(exception.getErrorCode().getCode()).isEqualTo(1004);
@@ -171,7 +160,6 @@ public class UserServiceTest {
     @Test
     @WithMockUser(authorities = "CREATE_USER")
     void createUser_numberedCollision_retrySuccess() {
-        when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(roleRepository.findByName("STUDENT")).thenReturn(Optional.of(new Role()));
         when(userMapper.toUser(any())).thenReturn(user);
         when(userMapper.toUserResponse(any())).thenReturn(userResponse);
@@ -194,7 +182,7 @@ public class UserServiceTest {
         org.springframework.security.core.Authentication auth = Mockito.mock(org.springframework.security.core.Authentication.class);
         when(auth.isAuthenticated()).thenReturn(true);
         when(auth.getName()).thenReturn("deleted@gmail.com");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(userRepository.findByNumbered(anyString())).thenReturn(Optional.empty());
         assertThrows(AppException.class, () -> userService.getMyInfo(auth));
     }
 
@@ -229,10 +217,10 @@ public class UserServiceTest {
         when(auth.isAuthenticated()).thenReturn(true);
         when(auth.getName()).thenReturn("TestUser@gmail.com");
         when(auth.getPrincipal()).thenReturn("notAnonymous");
-        when(userRepository.findByEmail(anyString())).thenReturn(java.util.Optional.of(user));
+        when(userRepository.findByNumbered(anyString())).thenReturn(java.util.Optional.of(user));
         when(userMapper.toUserResponse(any())).thenReturn(userResponse);
         var response = userService.getMyInfo(auth);
-        assertThat(response.getEmail()).isEqualTo("TestUser@gmail.com");
+        assertThat(response.getNumbered()).isEqualTo("TestUser@gmail.com");
     }
 
     @Test

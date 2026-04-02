@@ -17,9 +17,9 @@ public class UserRequest {
 @Size(min = 5, message = "NAME_INVALID")
 String name;
 
-@NotBlank(message = "EMAIL_REQUIRED")
-@Email(message = "EMAIL_INVALID")
-String email;
+@NotBlank(message = "PHONE_REQUIRED")
+@PhoneConstraint(message = "PHONE_INVALID")
+String phone;
 
 @NotBlank(message = "PASSWORD_REQUIRED")
 @Size(min = 8, message = "PASSWORD_INVALID")
@@ -28,9 +28,6 @@ String password;
 @Size(min = 2, max = 2, message = "NUMBER_ID_INVALID")
 @Pattern(regexp = "^[1-9][0-9]$", message = "NUMBER_ID_INVALID")
 String numbered;
-
-@PhoneConstraint(message = "PHONE_INVALID")
-String phone;
 
 @NotNull(message = "DOB_REQUIRED")
 @DobConstraint(min = 10, message = "DOB_INVALID")

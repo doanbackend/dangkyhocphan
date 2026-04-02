@@ -43,12 +43,9 @@ String numbered;
 String name;
 
 @Column(nullable = false, unique = true)
-String email;
+String phone;
 
 String password;
-
-@Column(unique = true)
-String phone;
 
 LocalDate dob;
 

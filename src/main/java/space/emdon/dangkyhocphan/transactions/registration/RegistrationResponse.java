@@ -12,7 +12,7 @@ public class RegistrationResponse {
 String id;
 String studentNumbered;
 String studentName;
-Long sectionclassId;
+String sectionclassId;
 String subjectName;
 String room;
 RegistrationStatus status;

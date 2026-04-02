@@ -11,7 +11,7 @@ import space.emdon.dangkyhocphan.coreeducations.schedule.ScheduleRequest;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SectionclassRequest {
-
+String name;
 String subjectCode;
 String lecturerNumbered;
 String semesterName;

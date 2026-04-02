@@ -42,7 +42,7 @@ protected Set<Sectionclass> mapAssignedClasses(Set<String> assignedClasses) {
 
 	List<Sectionclass> classes =
 		sectionclassRepository.findAllById(
-			assignedClasses.stream().map(Long::parseLong).collect(Collectors.toList()));
+			assignedClasses.stream().collect(Collectors.toList()));
 
 	return new HashSet<>(classes);
 }

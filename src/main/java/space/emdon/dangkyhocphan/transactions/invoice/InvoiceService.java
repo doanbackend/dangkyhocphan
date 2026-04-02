@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import space.emdon.dangkyhocphan.coreeducations.semester.Semester;
 import space.emdon.dangkyhocphan.coreeducations.semester.SemesterRepository;
+import space.emdon.dangkyhocphan.exception.AppException;
+import space.emdon.dangkyhocphan.exception.ErrorCode;
 import space.emdon.dangkyhocphan.rbac.user.User;
 import space.emdon.dangkyhocphan.rbac.user.UserRepository;
 
@@ -34,9 +36,7 @@ public InvoiceResponse createInvoice(InvoiceRequest request) {
 		userRepository
 			.findByNumbered(request.getStudentNumbered())
 			.orElseThrow(
-				() ->
-					new RuntimeException(
-						"Student not found with numberId: " + request.getStudentNumbered()));
+				() ->new AppException(ErrorCode.USER_NOT_FOUND));
 	invoice.setStudent(student);
 	}
 	if (request.getSemesterName() != null) {
@@ -45,43 +45,46 @@ public InvoiceResponse createInvoice(InvoiceRequest request) {
 			.findByName(request.getSemesterName())
 			.orElseThrow(
 				() ->
-					new RuntimeException(
-						"Semester not found with name: " + request.getSemesterName()));
+					new AppException(ErrorCode.SEMESTER_NOT_FOUND));
 	invoice.setSemester(semester);
 	}
-
 	invoice = invoiceRepository.save(invoice);
 	return invoiceMapper.toInvoiceResponse(invoice);
 }
 
-@PreAuthorize("hasAuthority('READ_INVOICES')")
+@PreAuthorize("hasAuthority('READ_INVOICE')")
 public List<InvoiceResponse> getInvoices() {
-	return invoiceRepository.findAll().stream().map(invoiceMapper::toInvoiceResponse).toList();
+	return invoiceRepository.findAll().stream()
+	.map(invoiceMapper::toInvoiceResponse)
+	.toList();
 }
 
 @PreAuthorize("hasAuthority('GET_MY_INVOICE')")
 public InvoiceResponse getInvoice(String id) {
 	Invoice invoice =
-		invoiceRepository.findById(id).orElseThrow(() -> new RuntimeException("Invoice not found"));
+		invoiceRepository
+		.findById(id)
+		.orElseThrow(
+			() -> new AppException(ErrorCode.INVOICE_NOT_EXIST));
 	return invoiceMapper.toInvoiceResponse(invoice);
 }
 
 @PreAuthorize("hasAuthority('UPDATE_INVOICE')")
 public InvoiceResponse updateInvoice(String id, InvoiceRequest request) {
 	Invoice invoice =
-		invoiceRepository.findById(id).orElseThrow(() -> new RuntimeException("Invoice not found"));
+		invoiceRepository
+		.findById(id)
+		.orElseThrow(
+			() -> new RuntimeException("Invoice not found"));
 
 	invoiceMapper.updateInvoice(invoice, request);
-
-	// Fetch and set related entities
 	if (request.getStudentNumbered() != null) {
 	User student =
 		userRepository
 			.findByNumbered(request.getStudentNumbered())
 			.orElseThrow(
 				() ->
-					new RuntimeException(
-						"Student not found with numberId: " + request.getStudentNumbered()));
+					new AppException(ErrorCode.USER_NOT_FOUND));
 	invoice.setStudent(student);
 	}
 	if (request.getSemesterName() != null) {
@@ -90,20 +93,15 @@ public InvoiceResponse updateInvoice(String id, InvoiceRequest request) {
 			.findByName(request.getSemesterName())
 			.orElseThrow(
 				() ->
-					new RuntimeException(
-						"Semester not found with name: " + request.getSemesterName()));
+					new AppException(ErrorCode.SEMESTER_NOT_FOUND));
 	invoice.setSemester(semester);
 	}
-
 	invoice = invoiceRepository.save(invoice);
 	return invoiceMapper.toInvoiceResponse(invoice);
 }
 
 @PreAuthorize("hasAuthority('DELETE_INVOICE')")
 public void deleteInvoice(String id) {
-	if (!invoiceRepository.existsById(id)) {
-	throw new RuntimeException("Invoice not found to delete");
-	}
 	invoiceRepository.deleteById(id);
 }
 }

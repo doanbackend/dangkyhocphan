@@ -28,7 +28,7 @@ import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Table(
 	uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"dayOfWeek", "startPeriod", "endPeriod", "section_class_id"})
+	@UniqueConstraint(columnNames = {"dayOfWeek", "startPeriod", "endPeriod", "section_class_name"})
 	})
 public class Schedule {
 @Id
@@ -43,5 +43,5 @@ int endPeriod;
 String room;
 
 @ManyToOne(fetch = FetchType.EAGER)
-Sectionclass sectionClass;
+Sectionclass sectionclass;
 }

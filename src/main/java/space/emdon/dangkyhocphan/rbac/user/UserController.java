@@ -81,9 +81,9 @@ ApiResponse<UserResponse> getMyInfo() {
 	return ApiResponse.<UserResponse>builder().result(userService.getMyInfo(SecurityContextHolder.getContext().getAuthentication())).build();
 }
 
-@PutMapping("/{id}")
-ApiResponse<UserResponse> updateUser(@PathVariable String id, @RequestBody @Valid UserRequest request) {
-	return ApiResponse.<UserResponse>builder().result(userService.updateUser(id, request)).build();
+@PutMapping("/{numbered}")
+ApiResponse<UserResponse> updateUser(@PathVariable String numbered, @RequestBody @Valid UserRequest request) {
+	return ApiResponse.<UserResponse>builder().result(userService.updateUser(numbered, request)).build();
 }
 
 @DeleteMapping("/{id}")

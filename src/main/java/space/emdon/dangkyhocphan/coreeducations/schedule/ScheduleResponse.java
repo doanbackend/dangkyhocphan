@@ -10,11 +10,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ScheduleResponse {
-Long id;
+String id;
 DayOfWeek dayOfWeek;
 int startPeriod;
 int endPeriod;
 String room;
 String subjectName;
-Long sectionClassId;
+String sectionclassId;
 }

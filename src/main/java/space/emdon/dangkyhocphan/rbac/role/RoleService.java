@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import space.emdon.dangkyhocphan.exception.AppException;
 import space.emdon.dangkyhocphan.exception.ErrorCode;
 import space.emdon.dangkyhocphan.rbac.permission.PermissionRepository;
+import space.emdon.dangkyhocphan.rbac.user.UserRepository;
 
 @Service
 @Transactional
@@ -21,20 +22,37 @@ public class RoleService {
 RoleRepository roleRepository;
 PermissionRepository permissionRepository;
 RoleMapper roleMapper;
+UserRepository userRepository;
 
 @PreAuthorize("hasRole('ADMIN')")
 public RoleResponse createRole(RoleRequest request) {
+	// Check if role name already exists
+	if (request.getName() != null && roleRepository.existsById(request.getName())) {
+		throw new AppException(ErrorCode.ROLE_EXISTED);
+	}
+	
+	// Validate permissions if provided
+	if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
+		var permissions = permissionRepository.findAllById(request.getPermissions());
+		if (permissions.size() != request.getPermissions().size()) {
+			throw new AppException(ErrorCode.PERMISSION_NOT_FOUND);
+		}
+	}
 
 	var role = roleMapper.toRole(request);
-	var permissions = permissionRepository.findAllById(request.getPermissions());
-	role.setPermissions(new HashSet<>(permissions));
+	if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
+		var permissions = permissionRepository.findAllById(request.getPermissions());
+		role.setPermissions(new HashSet<>(permissions));
+	}
 	role = roleRepository.save(role);
 	return roleMapper.toRoleResponse(role);
 }
 
 @PreAuthorize("hasRole('ADMIN')")
 public List<RoleResponse> getAllRoles() {
-	return roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList();
+	return roleRepository.findAll().stream()
+	.map(roleMapper::toRoleResponse)
+	.toList();
 }
 
 @PreAuthorize("hasRole('ADMIN')")
@@ -42,9 +60,14 @@ public void deleteRole(Role roleFromRequest) {
 	Role role =
 		roleRepository
 			.findById(roleFromRequest.getName())
-			.orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+			.orElseThrow(
+				() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
+	
+	if (userRepository.existsByRolesName(role.getName())) {
+		throw new AppException(ErrorCode.ROLE_IN_USE);
+	}
 
-	roleRepository.delete(role);
+	roleRepository.deleteById(role.getName());
 }
 
 @PreAuthorize("hasRole('ADMIN')")
@@ -52,7 +75,8 @@ public RoleResponse updateRoles(RoleRequest request) {
 	Role role =
 		roleRepository
 			.findById(request.getName())
-			.orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+			.orElseThrow(
+				() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
 	roleMapper.updateRole(role, request);
 	if (request.getPermissions() != null) {
 	var permissions = permissionRepository.findAllById(request.getPermissions());
@@ -61,6 +85,7 @@ public RoleResponse updateRoles(RoleRequest request) {
 	}
 	role.setPermissions(new HashSet<>(permissions));
 	}
-	return roleMapper.toRoleResponse(roleRepository.save(role));
+	role = roleRepository.save(role);
+	return roleMapper.toRoleResponse(role);
 }
 }

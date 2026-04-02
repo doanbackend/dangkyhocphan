@@ -17,7 +17,8 @@ import space.emdon.dangkyhocphan.rbac.permission.Permission;
 @EqualsAndHashCode(exclude = "permissions")
 public class Role {
 
-@Id String name;
+@Id
+String name;
 
 String description;
 

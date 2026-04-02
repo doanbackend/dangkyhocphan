@@ -22,8 +22,7 @@ import space.emdon.dangkyhocphan.rbac.user.User;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class Sectionclass {
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-Long id;
+String name;
 
 @ManyToOne(fetch = FetchType.EAGER)
 @JoinColumn(name = "subject_code", referencedColumnName = "code")
@@ -39,13 +38,13 @@ Semester semester;
 
 @Builder.Default
 @Column(name = "max_students")
-int maxStudents = 100;
+int maxStudents = 200;
 
 @Builder.Default
 @Column(name = "current_students")
 int currentStudents = 0;
 
-@OneToMany(mappedBy = "sectionClass", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+@OneToMany(mappedBy = "sectionclass", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 Set<Schedule> schedules;
 
 @Version Long version;

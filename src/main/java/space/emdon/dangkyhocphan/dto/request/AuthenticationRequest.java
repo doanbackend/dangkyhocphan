@@ -1,5 +1,6 @@
 package space.emdon.dangkyhocphan.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,10 +10,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationRequest {
-@jakarta.validation.constraints.NotBlank(message = "EMAIL_REQUIRED")
-@jakarta.validation.constraints.Email(message = "EMAIL_INVALID")
-String email;
+@NotBlank(message = "PHONE_REQUIRED")
+String phone;
 
-@jakarta.validation.constraints.NotBlank(message = "PASSWORD_REQUIRED")
+@NotBlank(message = "PASSWORD_REQUIRED")
 String password;
 }

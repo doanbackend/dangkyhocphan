@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import space.emdon.dangkyhocphan.rbac.role.Role;
 import space.emdon.dangkyhocphan.rbac.user.User;
 import space.emdon.dangkyhocphan.rbac.user.UserRepository;
 import space.emdon.dangkyhocphan.validator.TokenValidator;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -55,9 +56,10 @@ public IntrospectResponse introspect(IntrospectRequest request)
 }
 
 public AuthenticationResponse authenticate(AuthenticationRequest request) {
+
 	User user =
 		userRepository
-			.findByEmail(request.getEmail())
+			.findByPhone(request.getPhone())
 			.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 	boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
@@ -82,10 +84,10 @@ public AuthenticationResponse refreshToken(RefreshRequest request)
 	var jti = signedJwt.getJWTClaimsSet().getJWTID();
 	var expiryTime = signedJwt.getJWTClaimsSet().getExpirationTime();
 	tokenValidator.blacklistToken(jti, expiryTime);
-	var email = signedJwt.getJWTClaimsSet().getSubject();
+	var phone = signedJwt.getJWTClaimsSet().getSubject();
 	var user =
 		userRepository
-			.findByEmail(email)
+			.findByPhone(phone)
 			.orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 	var token = generateToken(user);
 	return AuthenticationResponse.builder().token(token).authenticated(true).build();
@@ -96,7 +98,7 @@ private String generateToken(User user) {
 
 	JWTClaimsSet claimsSet =
 		new JWTClaimsSet.Builder()
-			.subject(user.getEmail())
+			.subject(user.getPhone())
 			.issuer("emdon")
 			.jwtID(UUID.randomUUID().toString())
 			.issueTime(new Date())
