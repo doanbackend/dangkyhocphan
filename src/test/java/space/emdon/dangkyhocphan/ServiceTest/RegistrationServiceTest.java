@@ -1,5 +1,3 @@
 package space.emdon.dangkyhocphan.ServiceTest;
 
-public class RegistrationServiceTest {
-
-}
+public class RegistrationServiceTest {}

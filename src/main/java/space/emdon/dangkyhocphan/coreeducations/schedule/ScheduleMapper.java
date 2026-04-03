@@ -12,7 +12,7 @@ public interface ScheduleMapper {
 Schedule toSchedule(ScheduleRequest request);
 
 @Mapping(target = "id", source = "id")
-@Mapping(target = "sectionclassId", source = "sectionclass.name")
+@Mapping(target = "sectionclassName", source = "sectionclass.name")
 @Mapping(target = "subjectName", source = "sectionclass.subject.name")
 ScheduleResponse toScheduleResponse(Schedule schedule);
 

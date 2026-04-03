@@ -59,7 +59,6 @@ public SignedJWT verifyToken(String token, boolean isRefreshToken)
 	throw new AppException(ErrorCode.INVALID_TOKEN);
 	}
 
-	// Check if token is blacklisted
 	String jti = signedJwt.getJWTClaimsSet().getJWTID();
 	if (invalidatedTokenRepository.existsById(jti)) {
 	throw new AppException(ErrorCode.UNAUTHENTICATED);

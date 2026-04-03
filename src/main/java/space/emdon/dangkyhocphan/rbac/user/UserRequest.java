@@ -1,11 +1,19 @@
 package space.emdon.dangkyhocphan.rbac.user;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Set;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import space.emdon.dangkyhocphan.constraint.*;
+import space.emdon.dangkyhocphan.constraint.DobConstraint;
+import space.emdon.dangkyhocphan.constraint.PhoneConstraint;
 
 @Data
 @Builder
@@ -34,5 +42,5 @@ String numbered;
 LocalDate dob;
 
 Set<String> roles;
-Set<String> assignedClasses;
+Set<String> sectionclass;
 }

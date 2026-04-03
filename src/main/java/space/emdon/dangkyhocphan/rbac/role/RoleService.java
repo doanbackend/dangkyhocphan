@@ -3,9 +3,13 @@ package space.emdon.dangkyhocphan.rbac.role;
 import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import space.emdon.dangkyhocphan.exception.AppException;
@@ -16,7 +20,7 @@ import space.emdon.dangkyhocphan.rbac.user.UserRepository;
 @Service
 @Transactional
 @RequiredArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class RoleService {
 RoleRepository roleRepository;
@@ -26,23 +30,20 @@ UserRepository userRepository;
 
 @PreAuthorize("hasRole('ADMIN')")
 public RoleResponse createRole(RoleRequest request) {
-	// Check if role name already exists
 	if (request.getName() != null && roleRepository.existsById(request.getName())) {
-		throw new AppException(ErrorCode.ROLE_EXISTED);
-	}
-	
-	// Validate permissions if provided
-	if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
-		var permissions = permissionRepository.findAllById(request.getPermissions());
-		if (permissions.size() != request.getPermissions().size()) {
-			throw new AppException(ErrorCode.PERMISSION_NOT_FOUND);
-		}
+	throw new AppException(ErrorCode.ROLE_EXISTED);
 	}
 
+	if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
+	var permissions = permissionRepository.findAllById(request.getPermissions());
+	if (permissions.size() != request.getPermissions().size()) {
+		throw new AppException(ErrorCode.PERMISSION_NOT_FOUND);
+	}
+	}
 	var role = roleMapper.toRole(request);
 	if (request.getPermissions() != null && !request.getPermissions().isEmpty()) {
-		var permissions = permissionRepository.findAllById(request.getPermissions());
-		role.setPermissions(new HashSet<>(permissions));
+	var permissions = permissionRepository.findAllById(request.getPermissions());
+	role.setPermissions(new HashSet<>(permissions));
 	}
 	role = roleRepository.save(role);
 	return roleMapper.toRoleResponse(role);
@@ -60,11 +61,10 @@ public void deleteRole(Role roleFromRequest) {
 	Role role =
 		roleRepository
 			.findById(roleFromRequest.getName())
-			.orElseThrow(
-				() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
-	
+			.orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
+
 	if (userRepository.existsByRolesName(role.getName())) {
-		throw new AppException(ErrorCode.ROLE_IN_USE);
+	throw new AppException(ErrorCode.ROLE_IN_USE);
 	}
 
 	roleRepository.deleteById(role.getName());
@@ -75,8 +75,7 @@ public RoleResponse updateRoles(RoleRequest request) {
 	Role role =
 		roleRepository
 			.findById(request.getName())
-			.orElseThrow(
-				() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
+			.orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
 	roleMapper.updateRole(role, request);
 	if (request.getPermissions() != null) {
 	var permissions = permissionRepository.findAllById(request.getPermissions());

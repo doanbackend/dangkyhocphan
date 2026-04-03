@@ -5,6 +5,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,17 +28,15 @@ SectionclassRepository sectionclassRepository;
 @PreAuthorize("hasAuthority('CREATE_SEMESTER')")
 public SemesterResponse createSemester(SemesterRequest request) {
 	if (semesterRepository.findByName(request.getName()).isPresent()) {
-		throw new AppException(ErrorCode.SEMESTER_EXISTS);
+	throw new AppException(ErrorCode.SEMESTER_EXISTS);
 	}
-	
 
 	if (request.getStartDate().isAfter(request.getEndDate())) {
-		throw new AppException(ErrorCode.INVALID_DATE_RANGE);
+	throw new AppException(ErrorCode.INVALID_DATE_RANGE);
 	}
-	
 
 	if (request.getRegistrationStartDate().isAfter(request.getRegistrationEndDate())) {
-		throw new AppException(ErrorCode.INVALID_REGISTRATION_DATE_RANGE);
+	throw new AppException(ErrorCode.INVALID_REGISTRATION_DATE_RANGE);
 	}
 
 	var semester = semesterMapper.toSemester(request);
@@ -45,7 +46,9 @@ public SemesterResponse createSemester(SemesterRequest request) {
 
 @PreAuthorize("hasAuthority('READ_SEMESTER')")
 public List<SemesterResponse> getAllSemesters() {
-	return semesterRepository.findAll().stream().map(semesterMapper::toSemesterResponse).toList();
+	return semesterRepository.findAll().stream()
+	.map(semesterMapper::toSemesterResponse)
+			.toList();
 }
 
 @PreAuthorize("hasAuthority('UPDATE_SEMESTER')")
@@ -54,12 +57,11 @@ public void deleteSemester(String name) {
 		semesterRepository
 			.findByName(name)
 			.orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_EXIST));
-	
 
 	if (sectionclassRepository.existsBySemesterName(name)) {
-		throw new AppException(ErrorCode.SEMESTER_IN_USE);
+	throw new AppException(ErrorCode.SEMESTER_IN_USE);
 	}
-	
+
 	semesterRepository.delete(semester);
 }
 

@@ -1,9 +1,21 @@
 package space.emdon.dangkyhocphan.rbac.role;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import java.util.Set;
-import lombok.*;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.BatchSize;
 import space.emdon.dangkyhocphan.rbac.permission.Permission;
 
 @Entity
@@ -12,13 +24,12 @@ import space.emdon.dangkyhocphan.rbac.permission.Permission;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString(exclude = "permissions")
 @EqualsAndHashCode(exclude = "permissions")
 public class Role {
 
-@Id
-String name;
+@Id String name;
 
 String description;
 

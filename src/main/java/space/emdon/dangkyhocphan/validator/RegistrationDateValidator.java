@@ -3,7 +3,6 @@ package space.emdon.dangkyhocphan.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import space.emdon.dangkyhocphan.constraint.RegistrationDateConstraint;
-import space.emdon.dangkyhocphan.coreeducations.semester.Semester;
 import space.emdon.dangkyhocphan.coreeducations.semester.SemesterRequest;
 
 public class RegistrationDateValidator
@@ -24,10 +23,10 @@ public boolean isValid(SemesterRequest s, ConstraintValidatorContext context) {
 	if (!s.getRegistrationStartDate().isBefore(s.getRegistrationEndDate())) {
 		return buildError(context, "REG_END_BEFORE_REG_START");
 	}
-		if (s.getStartDate() != null) {
-	if (s.getRegistrationEndDate().toLocalDate().isAfter(s.getStartDate())) {
+	if (s.getStartDate() != null) {
+		if (s.getRegistrationEndDate().toLocalDate().isAfter(s.getStartDate())) {
 		return buildError(context, "REG_END_AFTER_START_DATE");
-	}
+		}
 	}
 	}
 
@@ -40,4 +39,3 @@ private boolean buildError(ConstraintValidatorContext context, String message) {
 	return false;
 }
 }
-

@@ -1,7 +1,11 @@
 package space.emdon.dangkyhocphan.coreeducations.schedule;
 
 import java.time.DayOfWeek;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
@@ -16,5 +20,5 @@ int startPeriod;
 int endPeriod;
 String room;
 String subjectName;
-String sectionclassId;
+String sectionclassName;
 }

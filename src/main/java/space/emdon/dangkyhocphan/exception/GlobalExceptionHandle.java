@@ -4,7 +4,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import java.nio.file.AccessDeniedException;
 import java.util.Objects;
-
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +50,8 @@ ResponseEntity<ApiResponse<?>> handlingDataIntegrityViolation(
 	DataIntegrityViolationException exception) {
 	ApiResponse<?> response = new ApiResponse<>();
 	response.setCode(ErrorCode.INVALID_KEY.getCode());
-	response.setMessage("Data integrity violation" + Objects.requireNonNull(exception.getRootCause()).getMessage());
+	response.setMessage(
+		"Data integrity violation" + Objects.requireNonNull(exception.getRootCause()).getMessage());
 	return ResponseEntity.status(ErrorCode.INVALID_KEY.getStatusCode()).body(response);
 }
 

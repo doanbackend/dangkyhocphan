@@ -1,7 +1,11 @@
 package space.emdon.dangkyhocphan.transactions.registration;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
@@ -14,6 +18,6 @@ public class RegistrationRequest {
 @NotBlank(message = "STUDENT_NUMBER_ID_REQUIRED")
 String studentNumberId;
 
-@NotBlank(message = "SECTION_CLASS_ID_REQUIRED")
-String sectionclassId;
+@NotBlank(message = "SECTION_CLASS_NAME_REQUIRED")
+String sectionclassName;
 }

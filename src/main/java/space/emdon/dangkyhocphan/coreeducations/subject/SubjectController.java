@@ -5,7 +5,11 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,9 +36,9 @@ ApiResponse<SubjectResponse> createSubject(@RequestBody @Valid SubjectRequest re
 }
 
 @GetMapping
-ApiResponse<List<SubjectResponse>> getAll() {
-	return ApiResponse.<List<SubjectResponse>>builder()
-		.result(subjectService.getAllSubjects())
+ApiResponse<Page<SubjectResponse>> getAll(@PageableDefault(page = 0, size = 20, sort = "code", direction = Sort.Direction.DESC)Pageable pageable) {
+	return ApiResponse.<Page<SubjectResponse>>builder()
+		.result(subjectService.getAllSubjects(pageable))
 		.build();
 }
 

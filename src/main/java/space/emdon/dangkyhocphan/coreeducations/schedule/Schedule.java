@@ -28,7 +28,8 @@ import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 @Table(
 	uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"dayOfWeek", "startPeriod", "endPeriod", "section_class_name"})
+	@UniqueConstraint(
+		columnNames = {"dayOfWeek", "startPeriod", "endPeriod", "section_class_name"})
 	})
 public class Schedule {
 @Id

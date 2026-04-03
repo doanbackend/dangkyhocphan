@@ -7,7 +7,6 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
 import space.emdon.dangkyhocphan.validator.NumberedValidator;
 
 @Target({FIELD})

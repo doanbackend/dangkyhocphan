@@ -11,6 +11,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
+
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -19,8 +21,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import space.emdon.dangkyhocphan.coreeducations.sectionclass.*;
-import space.emdon.dangkyhocphan.rbac.role.*;
+import org.hibernate.annotations.BatchSize;
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
+import space.emdon.dangkyhocphan.rbac.role.Role;
 
 @Entity
 @Getter
@@ -28,7 +31,7 @@ import space.emdon.dangkyhocphan.rbac.role.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "users")
 @ToString(exclude = "roles")
 @EqualsAndHashCode(exclude = "roles")
@@ -49,9 +52,11 @@ String password;
 
 LocalDate dob;
 
+@BatchSize(size = 50)
 @ManyToMany(fetch = FetchType.LAZY)
 Set<Role> roles;
 
-@OneToMany(mappedBy = "instructor")
-Set<Sectionclass> assignedClasses;
+@BatchSize(size = 50)
+@OneToMany(mappedBy = "lecturer")
+Set<Sectionclass> sectionclass;
 }

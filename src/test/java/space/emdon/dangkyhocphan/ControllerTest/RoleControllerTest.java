@@ -1,5 +1,3 @@
 package space.emdon.dangkyhocphan.ControllerTest;
 
-public class RoleControllerTest {
-
-}
+public class RoleControllerTest {}

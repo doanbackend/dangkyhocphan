@@ -1,7 +1,3 @@
 package space.emdon.dangkyhocphan.ControllerTest;
 
-
-
-public class PermissionControllerTest {
-
-}
+public class PermissionControllerTest {}

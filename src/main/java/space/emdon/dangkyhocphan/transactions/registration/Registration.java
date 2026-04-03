@@ -12,15 +12,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import space.emdon.dangkyhocphan.coreeducations.sectionclass.*;
+import space.emdon.dangkyhocphan.coreeducations.sectionclass.Sectionclass;
 import space.emdon.dangkyhocphan.enums.RegistrationStatus;
-import space.emdon.dangkyhocphan.rbac.user.*;
+import space.emdon.dangkyhocphan.rbac.user.User;
 
 @Entity
 @Getter
@@ -28,8 +30,9 @@ import space.emdon.dangkyhocphan.rbac.user.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"student_numbered", "section_class_id"})})
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(
+	uniqueConstraints = {@UniqueConstraint(columnNames = {"student_numbered", "sectionclass_name"})})
 public class Registration {
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,7 +43,7 @@ private String id;
 private User student;
 
 @ManyToOne(fetch = FetchType.EAGER)
-@JoinColumn(name = "section_class_id")
+@JoinColumn(name = "section_class_name")
 private Sectionclass sectionclass;
 
 @Enumerated(EnumType.STRING)

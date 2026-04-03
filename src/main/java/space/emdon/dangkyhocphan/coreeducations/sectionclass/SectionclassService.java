@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +21,6 @@ import space.emdon.dangkyhocphan.exception.ErrorCode;
 import space.emdon.dangkyhocphan.rbac.user.User;
 import space.emdon.dangkyhocphan.rbac.user.UserRepository;
 import space.emdon.dangkyhocphan.transactions.registration.RegistrationRepository;
-
 
 @Slf4j
 @Service
@@ -41,27 +43,21 @@ public SectionclassResponse createSectionclass(SectionclassRequest request) {
 	Subject subject =
 		subjectRepository
 			.findByCode(request.getSubjectCode())
-			.orElseThrow(
-				() ->
-					new AppException(ErrorCode.SUBJECT_NOT_FOUND));
+			.orElseThrow(() -> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
 	sectionclass.setSubject(subject);
 	}
 	if (request.getLecturerNumbered() != null) {
-	User instructor =
+	User lecturer =
 		userRepository
 			.findByNumbered(request.getLecturerNumbered())
-			.orElseThrow(
-				() ->
-					new AppException(ErrorCode.USER_NOT_FOUND));
-	sectionclass.setInstructor(instructor);
+			.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+	sectionclass.setLecturer(lecturer);
 	}
 	if (request.getSemesterName() != null) {
 	Semester semester =
 		semesterRepository
 			.findByName(request.getSemesterName())
-			.orElseThrow(
-				() ->
-					new AppException(ErrorCode.SEMESTER_NOT_FOUND));
+			.orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND));
 	sectionclass.setSemester(semester);
 	}
 
@@ -70,46 +66,47 @@ public SectionclassResponse createSectionclass(SectionclassRequest request) {
 }
 
 @PreAuthorize("hasAuthority('READ_SECTIONCLASS')")
-public List<SectionclassResponse> getAllSectionclasses() {
-	return sectionclassRepository.findAll().stream()
-		.map(sectionclassMapper::toSectionClassResponse)
-		.collect(Collectors.toList());
+public Page<SectionclassResponse> getAllSectionclasses(Pageable pageable) {
+	return sectionclassRepository.findAll(pageable)
+		.map(sectionclassMapper::toSectionClassResponse);
 }
 
 @PreAuthorize("hasAuthority('READ_SECTIONCLASS')")
 public SectionclassResponse getSectionclassByName(String name) {
 	return sectionclassMapper.toSectionClassResponse(
-		sectionclassRepository.findByName(name).orElseThrow(
-			() -> new AppException(ErrorCode.SECTIONCLASS_NOT_EXIST)));
+		sectionclassRepository
+			.findByName(name)
+			.orElseThrow(() -> new AppException(ErrorCode.SECTIONCLASS_NOT_EXIST)));
 }
 
 @PreAuthorize("hasAuthority('UPDATE_SECTIONCLASS')")
 public SectionclassResponse updateSectionclass(String name, SectionclassRequest request) {
-	
-	Sectionclass sectionclass = 
-	sectionclassRepository.findByName(name).orElseThrow(
-		() -> new AppException(ErrorCode.SECTIONCLASS_NOT_EXIST));
+
+	Sectionclass sectionclass =
+		sectionclassRepository
+			.findByName(name)
+			.orElseThrow(() -> new AppException(ErrorCode.SECTIONCLASS_NOT_EXIST));
 	sectionclassMapper.updateSectionClass(sectionclass, request);
 	if (request.getSubjectCode() != null) {
-		Subject subject =
-			subjectRepository
-				.findByCode(request.getSubjectCode())
-				.orElseThrow(() -> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
-		sectionclass.setSubject(subject);
+	Subject subject =
+		subjectRepository
+			.findByCode(request.getSubjectCode())
+			.orElseThrow(() -> new AppException(ErrorCode.SUBJECT_NOT_FOUND));
+	sectionclass.setSubject(subject);
 	}
 	if (request.getLecturerNumbered() != null) {
-		User instructor =
-			userRepository
-				.findByNumbered(request.getLecturerNumbered())
-				.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-		sectionclass.setInstructor(instructor);
+	User lecturer =
+		userRepository
+			.findByNumbered(request.getLecturerNumbered())
+			.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+	sectionclass.setLecturer(lecturer);
 	}
 	if (request.getSemesterName() != null) {
-		Semester semester =
-			semesterRepository
-				.findByName(request.getSemesterName())
-				.orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND));
-		sectionclass.setSemester(semester);
+	Semester semester =
+		semesterRepository
+			.findByName(request.getSemesterName())
+			.orElseThrow(() -> new AppException(ErrorCode.SEMESTER_NOT_FOUND));
+	sectionclass.setSemester(semester);
 	}
 
 	sectionclass = sectionclassRepository.save(sectionclass);
@@ -118,17 +115,15 @@ public SectionclassResponse updateSectionclass(String name, SectionclassRequest 
 
 @PreAuthorize("hasAuthority('DELETE_SECTIONCLASS')")
 public void deleteSectionclassByName(String name) {
-	Sectionclass sectionclass = sectionclassRepository.findByName(name).orElseThrow(
-		() -> new AppException(ErrorCode.SECTIONCLASS_NOT_EXIST));
-	
-	// Check foreign key constraint - Sectionclass is used by Registration
-	if (registrationRepository.existsBySectionClassId(sectionclass.getName())) {
-		throw new AppException(ErrorCode.SECTIONCLASS_IN_USE);
+	Sectionclass sectionclass =
+		sectionclassRepository
+			.findByName(name)
+			.orElseThrow(() -> new AppException(ErrorCode.SECTIONCLASS_NOT_EXIST));
+
+	if (registrationRepository.existsBySectionClassName(sectionclass.getName())) {
+	throw new AppException(ErrorCode.SECTIONCLASS_IN_USE);
 	}
-	
+
 	sectionclassRepository.deleteByName(sectionclass.getName());
 }
-
-
 }
-

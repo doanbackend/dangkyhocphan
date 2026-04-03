@@ -7,11 +7,11 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface SemesterMapper {
 
-@Mapping(target = "sectionClasses", ignore = true)
+@Mapping(target = "sectionclass", ignore = true)
 Semester toSemester(SemesterRequest request);
 
 SemesterResponse toSemesterResponse(Semester semester);
 
-@Mapping(target = "sectionClasses", ignore = true)
+@Mapping(target = "sectionclass", ignore = true)
 void updateSemester(@MappingTarget Semester semester, SemesterRequest request);
 }

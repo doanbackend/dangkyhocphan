@@ -1,5 +1,3 @@
 package space.emdon.dangkyhocphan.ControllerTest;
 
-public class RegistrationControllerTest {
-
-}
+public class RegistrationControllerTest {}

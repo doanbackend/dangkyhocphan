@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,24 +63,21 @@ private String generateNumbered(String prefix) {
 }
 
 @PreAuthorize("hasRole('ADMIN')")
-public List<UserResponse> getAllUsers() {
-	return userRepository.findAll().stream()
-	.map(userMapper::toUserResponse)
-	.toList();
+public Page<UserResponse> getAllUsers(Pageable pageable) {
+	return userRepository.findAll(pageable)
+	.map(userMapper::toUserResponse);
 }
 
 @PreAuthorize("hasAuthority('READ_USER')")
-public List<UserResponse> getUsers() {
-	return userRepository.findUsers().stream()
-	.map(userMapper::toUserResponse)
-	.toList();
+public Page<UserResponse> getUsers(Pageable pageable) {
+	return userRepository.findUsers(pageable)
+	.map(userMapper::toUserResponse);
 }
 
 @PreAuthorize("hasAuthority('READ_STUDENT')")
-public List<UserResponse> getStudents() {
-	return userRepository.findStudents().stream()
-	.map(userMapper::toUserResponse)
-	.toList();
+public Page<UserResponse> getStudents(Pageable pageable) {
+	return userRepository.findStudents(pageable)
+	.map(userMapper::toUserResponse);
 }
 
 @PreAuthorize("hasAuthority('READ_STUDENT')")

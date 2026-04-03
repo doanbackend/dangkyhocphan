@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,17 +36,14 @@ public RegistrationResponse createRegistration(RegistrationRequest request) {
 	User student =
 		userRepository
 			.findByNumbered(request.getStudentNumberId())
-			.orElseThrow(
-				() -> new AppException(ErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 	registration.setStudent(student);
 	}
-	if (request.getSectionclassId() != null) {
+	if (request.getSectionclassName() != null) {
 	Sectionclass sectionClass =
 		sectionclassRepository
-			.findById(request.getSectionclassId())
-			.orElseThrow(
-				() ->
-					new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
+			.findByName(request.getSectionclassName())
+			.orElseThrow(() -> new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
 	registration.setSectionclass(sectionClass);
 	}
 
@@ -53,8 +52,8 @@ public RegistrationResponse createRegistration(RegistrationRequest request) {
 }
 
 @PreAuthorize("hasAuthority('READ_REGISTRATION')")
-public List<RegistrationResponse> getAll() {
-	return registrationRepository.findAll().stream()
+public List<RegistrationResponse> getAll(Pageable pageable) {
+	return registrationRepository.findAll(pageable).stream()
 		.map(registrationMapper::toRegistrationResponse)
 		.toList();
 }
@@ -69,18 +68,14 @@ public RegistrationResponse updateRegistration(String id, RegistrationRequest re
 	User student =
 		userRepository
 			.findByNumbered(request.getStudentNumberId())
-			.orElseThrow(
-				() ->
-					new AppException(ErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 	registration.setStudent(student);
 	}
-	if (request.getSectionclassId() != null) {
+	if (request.getSectionclassName() != null) {
 	Sectionclass sectionClass =
 		sectionclassRepository
-			.findById(request.getSectionclassId())
-			.orElseThrow(
-				() ->
-					new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
+			.findByName(request.getSectionclassName())
+			.orElseThrow(() -> new AppException(ErrorCode.SECTIONCLASS_NOT_FOUND));
 	registration.setSectionclass(sectionClass);
 	}
 	registration = registrationRepository.save(registration);
@@ -89,9 +84,10 @@ public RegistrationResponse updateRegistration(String id, RegistrationRequest re
 
 @PreAuthorize("hasRole('ADMIN')")
 public void deleteRegistration(String id) {
-	Registration registration = registrationRepository
-	.findById(id)
-	.orElseThrow(() -> new AppException(ErrorCode.REGISTRATION_NOT_EXIST));
+	Registration registration =
+		registrationRepository
+			.findById(id)
+			.orElseThrow(() -> new AppException(ErrorCode.REGISTRATION_NOT_EXIST));
 	registrationRepository.delete(registration);
 }
 }

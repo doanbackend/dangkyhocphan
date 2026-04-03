@@ -1,12 +1,15 @@
 package space.emdon.dangkyhocphan.coreeducations.sectionclass;
 
-import java.util.List;
-
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +26,7 @@ import space.emdon.dangkyhocphan.dto.response.ApiResponse;
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class SectionclassController {
-	final SectionclassService sectionclassService;
+final SectionclassService sectionclassService;
 
 @PostMapping
 ApiResponse<SectionclassResponse> createSectionclass(@RequestBody SectionclassRequest request) {
@@ -33,9 +36,9 @@ ApiResponse<SectionclassResponse> createSectionclass(@RequestBody SectionclassRe
 }
 
 @GetMapping
-ApiResponse<List<SectionclassResponse>> getAllSectionclasses() {
-	return ApiResponse.<List<SectionclassResponse>>builder()
-		.result(sectionclassService.getAllSectionclasses())
+ApiResponse<Page<SectionclassResponse>> getAllSectionclasses(@PageableDefault(page = 0, size = 15, sort = "name", direction = Sort.Direction.DESC)Pageable pageable) {
+	return ApiResponse.<Page<SectionclassResponse>>builder()
+		.result(sectionclassService.getAllSectionclasses(pageable))
 		.build();
 }
 

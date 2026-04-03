@@ -10,6 +10,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.Set;
+
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +28,7 @@ import space.emdon.dangkyhocphan.transactions.registration.Registration;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Invoice {
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)
@@ -41,7 +43,7 @@ User student;
 Set<Registration> registrations;
 
 @ManyToOne(fetch = FetchType.EAGER)
-@JoinColumn(name = "semester_id")
+@JoinColumn(name = "semester_name")
 Semester semester;
 
 @Builder.Default Long totalAmount = 0L;

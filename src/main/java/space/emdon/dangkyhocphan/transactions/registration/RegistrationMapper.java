@@ -14,7 +14,7 @@ Registration toRegistration(RegistrationRequest request);
 
 @Mapping(target = "studentNumbered", source = "student.numbered")
 @Mapping(target = "studentName", source = "student.name")
-@Mapping(target = "sectionclassId", source = "sectionclass.name")
+@Mapping(target = "sectionclassName", source = "sectionclass.name")
 @Mapping(target = "subjectName", source = "sectionclass.subject.name")
 @Mapping(
 	target = "room",

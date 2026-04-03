@@ -15,7 +15,7 @@ Subject toSubject(SubjectRequest request);
 SubjectResponse toSubjectResponse(Subject subject);
 
 @Mapping(target = "sections", ignore = true)
-@Mapping(target = "id", ignore = true)
+@Mapping(target = "code", ignore = true)
 void updateSubject(@MappingTarget Subject subject, SubjectRequest request);
 
 SectionclassResponse toSectionclassResponse(Sectionclass sectionclass);

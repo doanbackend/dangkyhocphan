@@ -1,10 +1,13 @@
 package space.emdon.dangkyhocphan.rbac.permission;
 
 import java.util.List;
+
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +21,7 @@ import space.emdon.dangkyhocphan.dto.response.ApiResponse;
 @RestController
 @RequestMapping("/permissions")
 @RequiredArgsConstructor
-@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PermissionController {
 final PermissionService permissionService;
 
@@ -30,9 +33,9 @@ ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request) {
 }
 
 @GetMapping
-ApiResponse<List<PermissionResponse>> getAll() {
+ApiResponse<List<PermissionResponse>> getAll(Pageable pageable) {
 	return ApiResponse.<List<PermissionResponse>>builder()
-		.result(permissionService.getAllPermission())
+		.result(permissionService.getAllPermission(pageable))
 		.build();
 }
 

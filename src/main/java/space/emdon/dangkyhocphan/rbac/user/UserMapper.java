@@ -20,7 +20,7 @@ protected SectionclassRepository sectionclassRepository;
 
 @Autowired
 public void setSectionclassRepository(SectionclassRepository sectionclassRepository) {
-    this.sectionclassRepository = sectionclassRepository;
+	this.sectionclassRepository = sectionclassRepository;
 }
 
 @Mapping(target = "roles", ignore = true)
@@ -35,14 +35,13 @@ public abstract UserResponse toUserResponse(User user);
 @Mapping(target = "numbered", ignore = true)
 public abstract void updateUser(@MappingTarget User user, UserRequest request);
 
-protected Set<Sectionclass> mapAssignedClasses(Set<String> assignedClasses) {
-	if (assignedClasses == null || assignedClasses.isEmpty()) {
+protected Set<Sectionclass> mapSectionclass(Set<String> sectionclass) {
+	if (sectionclass == null || sectionclass.isEmpty()) {
 	return Collections.emptySet();
 	}
 
 	List<Sectionclass> classes =
-		sectionclassRepository.findAllById(
-			assignedClasses.stream().collect(Collectors.toList()));
+		sectionclassRepository.findAllById(sectionclass.stream().collect(Collectors.toList()));
 
 	return new HashSet<>(classes);
 }
