@@ -22,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -83,12 +84,12 @@ void createUserController_invalidRequest_success() throws Exception {
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(content))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.jsonPath("$code").value(1000))
-		.andExpect(MockMvcResultMatchers.jsonPath("$result.id").value("100"))
-		.andExpect(MockMvcResultMatchers.jsonPath("$result.name").value("TestUser"))
-		.andExpect(MockMvcResultMatchers.jsonPath("$result.numbered").value("21"))
-		.andExpect(MockMvcResultMatchers.jsonPath("$result.phone").value("0987654321"))
-		.andExpect(MockMvcResultMatchers.jsonPath("$result.dob").value("2000-01-01"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(0))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.id").value("100"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.name").value("TestUser"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.numbered").value("21"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.phone").value("0987654321"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.dob").value("2000-01-01"))
 		.andExpect(
 			MockMvcResultMatchers.jsonPath("$.result.roles[*].name", Matchers.hasItem("STUDENT")));
 }
@@ -107,7 +108,7 @@ void createUserController_nameInvalid_fail() throws Exception {
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(content))
 		.andExpect(MockMvcResultMatchers.status().isBadRequest())
-		.andExpect(MockMvcResultMatchers.jsonPath("$code").value(1003));
+		.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1104));
 }
 
 @Test
@@ -141,23 +142,25 @@ void createUserController_dobInvalid_fail() throws Exception {
 @Test
 @WithMockUser
 void getAllUsers_controller_success() throws Exception {
-	when(userService.getAllUsers(any(Pageable.class))).thenReturn(List.of(userResponse));
+	Page<UserResponse> page = new PageImpl<>(List.of(userResponse));
+	when(userService.getAllUsers(any(Pageable.class))).thenReturn(page);
 	mockMvc
 		.perform(MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result[*].name").value("TestUser"))
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result[*].id").value("100"));
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.content[*].name").value("TestUser"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.content[*].id").value("100"));
 }
 
 @Test
 @WithMockUser
 void getUsers_controller_success() throws Exception {
-	when(userService.getUsers(any(Pageable.class))).thenReturn(List.of(userResponse));
+	Page<UserResponse> page = new PageImpl<>(List.of(userResponse));
+	when(userService.getUsers(any(Pageable.class))).thenReturn(page);
 	mockMvc
 		.perform(
 			MockMvcRequestBuilders.get("/users/normal").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result").isArray());
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.content").isArray());
 }
 
 @Test
@@ -171,7 +174,7 @@ void getUserById_controller_success() throws Exception {
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.jsonPath("$.result.id").value("100"))
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result.email").value("TestUser@gmail.com"));
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.phone").value("0987654321"));
 }
 
 @Test
@@ -182,22 +185,23 @@ void getMyInfo_controller_success() throws Exception {
 		.perform(
 			MockMvcRequestBuilders.get("/users/myinfo").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result.email").value("TestUser@gmail.com"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.phone").value("0987654321"))
 		.andExpect(MockMvcResultMatchers.jsonPath("$.result.name").value("TestUser"));
 }
 
 @Test
 @WithMockUser
 void getStudents_controller_success() throws Exception {
-	when(userService.getStudents(any(Pageable.class))).thenReturn(Page(userResponse));
+	Page<UserResponse> page = new PageImpl<>(List.of(userResponse));
+	when(userService.getStudents(any(Pageable.class))).thenReturn(page);
 	mockMvc
 		.perform(
 			MockMvcRequestBuilders.get("/users/students").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(0))
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result").isArray())
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result[0].name").value("TestUser"))
-		.andExpect(MockMvcResultMatchers.jsonPath("$.result[0].email").value("TestUser@gmail.com"));
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.content").isArray())
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.content[0].name").value("TestUser"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$.result.content[0].phone").value("0987654321"));
 }
 
 @Test

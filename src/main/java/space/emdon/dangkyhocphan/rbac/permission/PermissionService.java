@@ -23,7 +23,6 @@ import space.emdon.dangkyhocphan.rbac.role.RoleRepository;
 public class PermissionService {
 PermissionRepository permissionRepository;
 PermissionMapper permissionMapper;
-RoleRepository roleRepository;
 
 @PreAuthorize("hasRole('ADMIN')")
 public PermissionResponse createPermission(PermissionRequest request) {

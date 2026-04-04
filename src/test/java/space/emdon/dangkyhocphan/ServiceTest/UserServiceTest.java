@@ -87,7 +87,7 @@ void initData() {
 @Test
 @WithMockUser(authorities = "CREATE_USER")
 void createUserService_invalidRequest_success() throws Exception {
-	when(userRepository.existsByName(anyString())).thenReturn(false);
+	when(userRepository.existsById(anyString())).thenReturn(true);
 	Role role = Role.builder().name("STUDENT").build();
 	when(roleRepository.findByName(any())).thenReturn(Optional.of(role));
 	when(userMapper.toUser(any())).thenReturn(user);
@@ -102,14 +102,13 @@ void createUserService_invalidRequest_success() throws Exception {
 @WithMockUser(authorities = "UPDATE_USER")
 void updateUserService_validRequest_success() throws Exception {
 	String userNumbered = "21";
-	user.setNumbered("22");
 	when(userRepository.findByNumbered(anyString())).thenReturn(java.util.Optional.of(user));
 	when(roleRepository.findAllById(any())).thenReturn(List.of(new Role()));
 	when(userMapper.toUserResponse(any())).thenReturn(userResponse);
 	when(passwordEncoder.encode(anyString())).thenReturn("hashed_pass");
 	when(userRepository.save(any())).thenReturn(user);
 	var response = userService.updateUser(userNumbered, userRequest);
-	assertThat(response.getNumbered()).isEqualTo("22");
+	assertThat(response.getNumbered()).isEqualTo("21");
 	assertThat(response.getName()).isEqualTo("TestUser");
 }
 
@@ -117,11 +116,11 @@ void updateUserService_validRequest_success() throws Exception {
 @WithMockUser(authorities = "UPDATE_USER")
 void updateUserService_usernameException_fail() {
 	String userNumbered = "21";
-	userRequest.setNumbered("");
+	userRequest.setNumbered("22");
 	when(userRepository.existsByNumbered(anyString())).thenReturn(true);
 	var exception =
 		assertThrows(AppException.class, () -> userService.updateUser(userNumbered, userRequest));
-	assertThat(exception.getErrorCode().getCode()).isEqualTo(1004);
+	assertThat(exception.getErrorCode().getCode()).isEqualTo(1102);
 }
 
 @Test
@@ -132,7 +131,7 @@ void getAllUsers_success() {
 	when(userMapper.toUserResponse(any())).thenReturn(userResponse);
 	var response = userService.getAllUsers(Pageable.unpaged());
 	assertThat(response).isNotEmpty();
-	assertThat(response.get(0).getName()).isEqualTo("TestUser");
+	assertThat(response.getContent().get(0).getName()).isEqualTo("TestUser");
 }
 
 @Test
@@ -164,7 +163,7 @@ void updateUserService_userNotFound_fail() {
 	when(userRepository.findByNumbered(userNumbered)).thenReturn(Optional.empty());
 	var exception =
 		assertThrows(AppException.class, () -> userService.updateUser(userNumbered, userRequest));
-	assertThat(exception.getErrorCode().getCode()).isEqualTo(1001);
+	assertThat(exception.getErrorCode().getCode()).isEqualTo(1102);
 }
 
 @Test
@@ -203,7 +202,7 @@ void getUserById_invalidId_fail() {
 	String id = "invalid_id";
 	when(userRepository.findById(id)).thenReturn(java.util.Optional.empty());
 	var exception = assertThrows(AppException.class, () -> userService.getUserById(id));
-	assertThat(exception.getErrorCode().getCode()).isEqualTo(1001);
+	assertThat(exception.getErrorCode().getCode()).isEqualTo(1102);
 }
 
 @Test
@@ -211,7 +210,7 @@ void getMyInfo_success() {
 	org.springframework.security.core.Authentication auth =
 		Mockito.mock(org.springframework.security.core.Authentication.class);
 	when(auth.isAuthenticated()).thenReturn(true);
-	when(auth.getName()).thenReturn("TestUser@gmail.com");
+	when(auth.getName()).thenReturn("0987654321");
 	when(auth.getPrincipal()).thenReturn("notAnonymous");
 	when(userRepository.findByNumbered(anyString())).thenReturn(java.util.Optional.of(user));
 	when(userMapper.toUserResponse(any())).thenReturn(userResponse);
@@ -222,7 +221,7 @@ void getMyInfo_success() {
 @Test
 void getMyInfo_unauthenticated_fail() {
 	var exception = assertThrows(AppException.class, () -> userService.getMyInfo(null));
-	assertThat(exception.getErrorCode().getCode()).isEqualTo(1010); // Giả sử mã của UNAUTHENTICATED
+	assertThat(exception.getErrorCode().getCode()).isEqualTo(1010);
 }
 
 @Test
@@ -241,7 +240,7 @@ void deleteUser_userNotFound_fail() {
 	when(userRepository.findById(userId)).thenReturn(Optional.empty());
 	var exception = assertThrows(RuntimeException.class, () -> userService.deleteUser(userId));
 
-	assertThat(exception.getMessage()).isEqualTo("User not found");
+	assertThat(exception.getMessage()).isEqualTo("User not exist");
 }
 
 @Test
@@ -254,10 +253,10 @@ void deleteUser_isAdmin_fail() {
 
 	var exception =
 		assertThrows(
-			org.springframework.security.access.AccessDeniedException.class,
+	AppException.class,
 			() -> userService.deleteUser(userId));
 
-	assertThat(exception.getMessage()).isEqualTo("Cannot delete ADMIN user");
+	assertThat(exception.getMessage()).isEqualTo("Cannot delete admin");
 	Mockito.verify(userRepository, Mockito.never()).delete(any());
 }
 }
