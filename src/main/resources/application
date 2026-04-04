@@ -1,0 +1,17 @@
+spring.application.name=
+server.port=
+spring.datasource.url=
+spring.datasource.driver-class-name=
+spring.datasource.username=
+spring.datasource.password=
+
+spring.jpa.hibernate.ddl-auto=
+spring.jpa.show-sql=
+spring.data.web.pageable.max-page-size=
+spring.jwt.SIGNER_KEY=
+spring.jwt.valid_duration=
+spring.jwt.refreshable_duration=
+spring.admin.name=
+spring.admin.password=
+spring.admin.phone=
+spring.admin.numbered=

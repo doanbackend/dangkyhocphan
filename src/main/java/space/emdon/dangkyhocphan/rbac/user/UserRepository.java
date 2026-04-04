@@ -33,6 +33,7 @@ Page<User> findAll(Pageable pageable);
     Page<User> findStudents(Pageable pageable);
 
 @EntityGraph(attributePaths = {"roles"})
+
 List<User> findByRolesName(String roleName);
 
 @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.roles r WHERE r.name = :roleName")

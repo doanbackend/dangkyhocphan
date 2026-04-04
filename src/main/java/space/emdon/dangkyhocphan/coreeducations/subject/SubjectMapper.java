@@ -9,12 +9,12 @@ import space.emdon.dangkyhocphan.coreeducations.sectionclass.SectionclassRespons
 @Mapper(componentModel = "spring")
 public interface SubjectMapper {
 
-@Mapping(target = "sections", ignore = true)
+@Mapping(target = "sectionclass", ignore = true)
 Subject toSubject(SubjectRequest request);
 
 SubjectResponse toSubjectResponse(Subject subject);
 
-@Mapping(target = "sections", ignore = true)
+@Mapping(target = "sectionclass", ignore = true)
 @Mapping(target = "code", ignore = true)
 void updateSubject(@MappingTarget Subject subject, SubjectRequest request);
 
